@@ -33,11 +33,20 @@ export default {
                     950: '#451a03',
                 }
             },
-            fontFamily: {
-                sans: ['Inter', 'sans-serif'],
-                serif: ['Playfair Display', 'serif'],
+        },
+        fontFamily: {
+            sans: ['Inter', 'sans-serif'],
+            serif: ['Playfair Display', 'serif'],
+        },
+        keyframes: {
+            shine: {
+                '100%': { left: '125%' },
             }
         },
+        animation: {
+            shine: 'shine 1s',
+        }
     },
-    plugins: [],
+},
+plugins: [],
 }

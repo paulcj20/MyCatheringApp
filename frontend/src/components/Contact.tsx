@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion';
-import { FaPhoneAlt, FaEnvelope, FaMapMarkerAlt, FaUser, FaCommentDots, FaClock } from 'react-icons/fa';
+import { FaPhoneAlt, FaEnvelope, FaMapMarkerAlt, FaUser, FaCommentDots, FaClock, FaInstagram, FaFacebookF, FaWhatsapp } from 'react-icons/fa';
 
 const Contact = () => {
     return (
@@ -20,78 +20,15 @@ const Contact = () => {
                         Hablemos de su Evento
                     </h2>
                     <p className="mt-4 text-base md:text-lg text-gray-500 max-w-2xl mx-auto">
-                        ¿Tienes dudas o estás listo para planear? Estamos aquí para ayudarte en cada paso.
+                        ¿Tienes dudas o estás listo para planear? Estamos aquí para ayudarte en cada paso!
+                        Nos ajustamos al presupuesto de cada evento.
                     </p>
                 </motion.div>
 
                 <div className="grid grid-cols-1 lg:grid-cols-5 gap-12 items-start">
-                    {/* Info Card - Left Column */}
+                    {/* Form Card - Left Column (was Right) */}
                     <motion.div
                         initial={{ opacity: 0, x: -50 }}
-                        whileInView={{ opacity: 1, x: 0 }}
-                        viewport={{ once: false, amount: 0.25 }}
-                        transition={{ delay: 0.2 }}
-                        className="lg:col-span-2 space-y-8"
-                    >
-                        <div className="bg-primary-50 p-8 rounded-2xl border border-primary-100 shadow-lg">
-                            <h3 className="text-2xl font-bold text-primary-900 mb-6 font-serif">Información Directa</h3>
-                            <div className="space-y-6">
-                                <div className="flex items-start">
-                                    <div className="flex-shrink-0">
-                                        <div className="flex items-center justify-center h-10 w-10 rounded-full bg-primary-100 text-primary-600">
-                                            <FaPhoneAlt />
-                                        </div>
-                                    </div>
-                                    <div className="ml-4">
-                                        <p className="text-sm font-medium text-gray-900">Teléfono</p>
-                                        <p className="text-base text-gray-600">+54 9 11 1234 5678</p>
-                                    </div>
-                                </div>
-                                <div className="flex items-start">
-                                    <div className="flex-shrink-0">
-                                        <div className="flex items-center justify-center h-10 w-10 rounded-full bg-primary-100 text-primary-600">
-                                            <FaEnvelope />
-                                        </div>
-                                    </div>
-                                    <div className="ml-4">
-                                        <p className="text-sm font-medium text-gray-900">Email</p>
-                                        <p className="text-base text-gray-600">contacto@mycathering.com</p>
-                                    </div>
-                                </div>
-                                <div className="flex items-start">
-                                    <div className="flex-shrink-0">
-                                        <div className="flex items-center justify-center h-10 w-10 rounded-full bg-primary-100 text-primary-600">
-                                            <FaMapMarkerAlt />
-                                        </div>
-                                    </div>
-                                    <div className="ml-4">
-                                        <p className="text-sm font-medium text-gray-900">Ubicación</p>
-                                        <p className="text-base text-gray-600">Buenos Aires, Argentina</p>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div className="bg-white p-8 rounded-2xl border border-gray-100 shadow-lg">
-                            <h4 className="flex items-center text-lg font-bold text-gray-900 mb-4 font-serif">
-                                <FaClock className="text-accent-500 mr-2" /> Horarios de Atención
-                            </h4>
-                            <div className="space-y-2">
-                                <div className="flex justify-between text-sm">
-                                    <span className="text-gray-500">Lunes a Viernes</span>
-                                    <span className="font-medium text-gray-900">9:00 - 18:00</span>
-                                </div>
-                                <div className="flex justify-between text-sm">
-                                    <span className="text-gray-500">Sábados</span>
-                                    <span className="font-medium text-gray-900">10:00 - 14:00</span>
-                                </div>
-                            </div>
-                        </div>
-                    </motion.div>
-
-                    {/* Form Card - Right Column */}
-                    <motion.div
-                        initial={{ opacity: 0, x: 50 }}
                         whileInView={{ opacity: 1, x: 0 }}
                         viewport={{ once: false, amount: 0.25 }}
                         transition={{ delay: 0.2 }}
@@ -153,6 +90,84 @@ const Contact = () => {
                                 </button>
                             </div>
                         </form>
+                    </motion.div>
+
+                    {/* Info Section - Right Column (was Left) */}
+                    <motion.div
+                        initial={{ opacity: 0, x: 50 }}
+                        whileInView={{ opacity: 1, x: 0 }}
+                        viewport={{ once: false, amount: 0.25 }}
+                        transition={{ delay: 0.2 }}
+                        className="lg:col-span-2 space-y-10"
+                    >
+                        {/* Direct Info */}
+                        <div>
+                            <h3 className="text-2xl font-bold text-gray-900 font-serif mb-6 border-b border-gray-200 pb-2 inline-block">
+                                Información Directa
+                            </h3>
+                            <ul className="space-y-6">
+                                <li className="flex items-start">
+                                    <span className="flex-shrink-0 w-12 h-12 flex items-center justify-center rounded-full bg-accent-100 text-accent-600">
+                                        <FaPhoneAlt size={18} />
+                                    </span>
+                                    <div className="ml-4">
+                                        <h4 className="text-lg font-medium text-gray-900">Teléfono</h4>
+                                        <p className="mt-1 text-gray-500">+54 9 11 1234 5678</p>
+                                    </div>
+                                </li>
+                                <li className="flex items-start">
+                                    <span className="flex-shrink-0 w-12 h-12 flex items-center justify-center rounded-full bg-accent-100 text-accent-600">
+                                        <FaEnvelope size={18} />
+                                    </span>
+                                    <div className="ml-4">
+                                        <h4 className="text-lg font-medium text-gray-900">Email</h4>
+                                        <p className="mt-1 text-gray-500">contacto@mycathering.com</p>
+                                    </div>
+                                </li>
+                                <li className="flex items-start">
+                                    <span className="flex-shrink-0 w-12 h-12 flex items-center justify-center rounded-full bg-accent-100 text-accent-600">
+                                        <FaMapMarkerAlt size={18} />
+                                    </span>
+                                    <div className="ml-4">
+                                        <h4 className="text-lg font-medium text-gray-900">Ubicación</h4>
+                                        <p className="mt-1 text-gray-500">Montevideo, Uruguay</p>
+                                    </div>
+                                </li>
+                            </ul>
+
+                            {/* Social Media */}
+                            <div className="mt-8 pt-6 border-t border-gray-100">
+                                <h4 className="text-lg font-medium text-gray-900 mb-4 font-serif">Síguenos</h4>
+                                <div className="flex space-x-4">
+                                    <a href="#" className="w-10 h-10 rounded-full bg-primary-50 flex items-center justify-center text-primary-600 hover:bg-accent-500 hover:text-white transition-all duration-300 shadow-sm hover:shadow-lg hover:-translate-y-1">
+                                        <FaInstagram size={20} />
+                                    </a>
+                                    <a href="#" className="w-10 h-10 rounded-full bg-primary-50 flex items-center justify-center text-primary-600 hover:bg-accent-500 hover:text-white transition-all duration-300 shadow-sm hover:shadow-lg hover:-translate-y-1">
+                                        <FaFacebookF size={20} />
+                                    </a>
+                                    <a href="#" className="w-10 h-10 rounded-full bg-primary-50 flex items-center justify-center text-primary-600 hover:bg-accent-500 hover:text-white transition-all duration-300 shadow-sm hover:shadow-lg hover:-translate-y-1">
+                                        <FaWhatsapp size={20} />
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+
+                        {/* Hours */}
+                        <div>
+                            <h3 className="text-2xl font-bold text-gray-900 font-serif mb-6 border-b border-gray-200 pb-2 block flex items-center gap-2">
+                                <FaClock className="text-accent-500" size={24} /> Horarios de Atención
+                            </h3>
+                            <ul className="space-y-4 pl-2">
+                                <li className="flex justify-between items-center text-lg border-b border-dashed border-gray-200 pb-2">
+                                    <span className="text-gray-600 font-medium">Lunes a Viernes</span>
+                                    <span className="text-gray-900 font-bold">9:00 - 19:00</span>
+                                </li>
+                                <li className="flex justify-between items-center text-lg border-b border-dashed border-gray-200 pb-2">
+                                    <span className="text-gray-600 font-medium">Sábados</span>
+                                    <span className="text-gray-900 font-bold">10:00 - 16:00</span>
+                                </li>
+                            </ul>
+                        </div>
                     </motion.div>
                 </div>
             </div>

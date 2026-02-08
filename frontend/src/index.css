@@ -6,8 +6,9 @@
   html {
     scroll-behavior: smooth;
   }
+
   body {
-    @apply font-sans text-slate-800 bg-slate-50;
+    @apply font-serif text-slate-800 bg-slate-50;
   }
 
   h1,
@@ -17,5 +18,34 @@
   h5,
   h6 {
     @apply font-serif;
+  }
+}
+
+@layer utilities {
+  .hide-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+
+  .hide-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+
+  @keyframes scroll {
+    0% {
+      transform: translateX(0);
+    }
+
+    100% {
+      transform: translateX(-50%);
+    }
+  }
+
+  .animate-scroll {
+    animation: scroll 40s linear infinite;
+  }
+
+  .hover\:pause:hover {
+    animation-play-state: paused;
   }
 }

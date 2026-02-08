@@ -1,0 +1,25 @@
+mutation CreateClient($name: String!, $email: String!, $createdAt: Timestamp!) @auth(level: USER) {
+  client_insert(data: {name: $name, email: $email, createdAt: $createdAt})
+}
+
+query GetMenuItem @auth(level: PUBLIC, insecureReason: "This operation is safe to expose to the public") {
+  menuItems {
+    id
+    name
+    description
+    price
+    category
+  }
+}
+
+mutation UpdateOrder($id: UUID!, $status: String!) @auth(level: USER) {
+  order_update(key: {id: $id}, data: {status: $status})
+}
+
+query ListMenus @auth(level: USER) {
+  menus {
+    id
+    name
+    description
+  }
+}

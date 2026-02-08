@@ -14,6 +14,12 @@ const services = [
         image: 'https://images.unsplash.com/photo-1511795409834-ef04bbd61622?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80',
     },
     {
+        title: 'Cumpleaños & Social',
+        description: 'Celebraciones vibrantes y emotivas, donde cada detalle refleja su alegría.',
+        icon: '🎂',
+        image: 'https://images.unsplash.com/photo-1530103862676-de3c9a59af38?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80',
+    },
+    {
         title: 'Fiestas Privadas',
         description: 'Celebre con estilo en la comodidad de su hogar o venue favorito.',
         icon: '🎉',
@@ -21,24 +27,8 @@ const services = [
     },
 ];
 
-const containerVariants = {
-    hidden: { opacity: 0 },
-    visible: {
-        opacity: 1,
-        transition: {
-            staggerChildren: 0.2
-        }
-    }
-};
 
-const itemVariants = {
-    hidden: { opacity: 0, y: 30 },
-    visible: {
-        opacity: 1,
-        y: 0,
-        transition: { duration: 0.6 }
-    }
-};
+
 
 const Services = () => {
     return (
@@ -60,30 +50,26 @@ const Services = () => {
                     </p>
                 </motion.div>
 
-                <motion.div
-                    variants={containerVariants}
-                    initial="hidden"
-                    whileInView="visible"
-                    viewport={{ once: false, amount: 0.1 }}
-                    className="mt-12 md:mt-20 grid grid-cols-1 gap-10 sm:grid-cols-2 lg:grid-cols-3"
-                >
-                    {services.map((service) => (
-                        <motion.div
-                            key={service.title}
-                            variants={itemVariants}
-                            className="group relative bg-white rounded-2xl shadow-xl overflow-hidden hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 border border-gray-100"
-                        >
-                            <div className="h-48 w-full overflow-hidden">
-                                <img src={service.image} alt={service.title} className="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-500" />
+                <div className="mt-12 md:mt-20 relative w-full overflow-hidden mask-gradient-x">
+                    <div className="flex w-max hover:pause animate-scroll gap-8">
+                        {/* First set of items */}
+                        {[...services, ...services].map((service, index) => (
+                            <div
+                                key={`${service.title}-${index}`}
+                                className="flex-shrink-0 w-80 md:w-96 group relative bg-white rounded-2xl shadow-xl overflow-hidden hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 border border-gray-100 mx-4"
+                            >
+                                <div className="h-48 w-full overflow-hidden">
+                                    <img src={service.image} alt={service.title} className="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-500" />
+                                </div>
+                                <div className="p-6 md:p-8">
+                                    <div className="text-4xl mb-4">{service.icon === 'tophat' ? '🎩' : service.icon}</div>
+                                    <h3 className="text-xl font-bold text-gray-900 font-serif mb-2">{service.title}</h3>
+                                    <p className="text-gray-500">{service.description}</p>
+                                </div>
                             </div>
-                            <div className="p-6 md:p-8">
-                                <div className="text-4xl mb-4">{service.icon === 'tophat' ? '🎩' : service.icon}</div>
-                                <h3 className="text-xl font-bold text-gray-900 font-serif mb-2">{service.title}</h3>
-                                <p className="text-gray-500">{service.description}</p>
-                            </div>
-                        </motion.div>
-                    ))}
-                </motion.div>
+                        ))}
+                    </div>
+                </div>
             </div>
         </section>
     );

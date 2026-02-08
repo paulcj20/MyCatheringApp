@@ -10,6 +10,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@dataconnect/generated": "file:src/dataconnect-generated",
     "@tailwindcss/postcss": "^4.1.18",
     "axios": "^1.13.4",
     "firebase": "^12.9.0",
