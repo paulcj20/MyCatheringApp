@@ -3,18 +3,21 @@ import DatePicker from 'react-datepicker';
 import "react-datepicker/dist/react-datepicker.css";
 import axios from 'axios';
 import { motion } from 'framer-motion';
-import { FaUser, FaEnvelope, FaCalendarAlt, FaClock, FaUsers, FaGlassCheers, FaCommentDots } from 'react-icons/fa';
+import { FaUser, FaEnvelope, FaCalendarAlt, FaClock, FaUsers, FaGlassCheers, FaCommentDots, FaWhatsapp } from 'react-icons/fa';
 
 const Agenda = () => {
-    const [formData, setFormData] = useState({
+    const initialForm = {
         clientName: '',
         email: '',
+        phone: '',
         eventDate: new Date(),
         eventTime: '12:00',
         guestCount: 50,
         eventType: 'Bodas',
-        message: ''
-    });
+        message: '',
+        contactPreference: '', // honeypot: los bots lo llenan, las personas no lo ven
+    };
+    const [formData, setFormData] = useState(initialForm);
     const [status, setStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle');
 
     const handleSubmit = async (e: React.FormEvent) => {
@@ -24,21 +27,14 @@ const Agenda = () => {
             const timeParts = formData.eventTime.split(':');
             const formattedTime = `${timeParts[0].padStart(2, '0')}:${timeParts[1].padStart(2, '0')}:00`;
 
-            await axios.post('http://localhost:8080/api/bookings', {
+            const apiBase = import.meta.env.VITE_API_BASE_URL ?? '';
+            await axios.post(`${apiBase}/api/bookings`, {
                 ...formData,
                 eventDate: formData.eventDate.toISOString().split('T')[0],
                 eventTime: formattedTime
             });
             setStatus('success');
-            setFormData({
-                clientName: '',
-                email: '',
-                eventDate: new Date(),
-                eventTime: '12:00',
-                guestCount: 50,
-                eventType: 'Bodas',
-                message: ''
-            });
+            setFormData(initialForm);
         } catch (error) {
             console.error(error);
             setStatus('error');
@@ -63,7 +59,7 @@ const Agenda = () => {
                         Agenda Online
                     </p>
                     <p className="mt-4 max-w-2xl text-lg text-ink-500 mx-auto">
-                        Planifique su próximo evento con nosotros. Complete el formulario y verificaremos disponibilidad al instante.
+                        Contanos sobre tu evento y te confirmamos disponibilidad a la brevedad por WhatsApp.
                     </p>
                 </motion.div>
 
@@ -115,7 +111,7 @@ const Agenda = () => {
                         className="lg:col-span-3 bg-surface rounded-2xl shadow-2xl p-6 md:p-10 border border-ink-200"
                     >
                         <form onSubmit={handleSubmit} className="space-y-6">
-                            <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
+                            <div className="grid grid-cols-1 gap-6 sm:grid-cols-3">
                                 <div className="relative">
                                     <label htmlFor="clientName" className="block text-sm font-medium text-ink-700 mb-1">Nombre Completo</label>
                                     <div className="relative rounded-md shadow-sm">
@@ -149,6 +145,28 @@ const Agenda = () => {
                                             onChange={(e) => setFormData({ ...formData, email: e.target.value })}
                                         />
                                     </div>
+                                </div>
+                                <div>
+                                    <label htmlFor="phone" className="block text-sm font-medium text-ink-700 mb-1">
+                                        WhatsApp
+                                    </label>
+                                    <div className="relative rounded-md shadow-sm">
+                                        <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                            <FaWhatsapp className="text-ink-400" />
+                                        </div>
+                                        <input
+                                            type="tel"
+                                            id="phone"
+                                            required
+                                            className="block w-full pl-10 rounded-lg border-ink-300 shadow-sm focus:border-brand-500 focus:ring-brand-500 p-3 border"
+                                            placeholder="+598 91 234 567"
+                                            value={formData.phone}
+                                            onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
+                                        />
+                                    </div>
+                                    <p className="mt-1 text-xs text-ink-600">
+                                        Con código de país. Te escribimos por acá.
+                                    </p>
                                 </div>
                             </div>
 
@@ -236,13 +254,25 @@ const Agenda = () => {
                                 </div>
                             </div>
 
+                            <div className="absolute left-[-9999px]" aria-hidden="true">
+                                <label htmlFor="contactPreference">No completar</label>
+                                <input
+                                    type="text"
+                                    id="contactPreference"
+                                    tabIndex={-1}
+                                    autoComplete="off"
+                                    value={formData.contactPreference}
+                                    onChange={(e) => setFormData({ ...formData, contactPreference: e.target.value })}
+                                />
+                            </div>
+
                             <div className="pt-2">
                                 <button
                                     type="submit"
                                     disabled={status === 'loading'}
                                     className="w-full flex justify-center py-4 px-4 border border-transparent rounded-lg shadow-lg text-lg font-bold text-white uppercase tracking-wider bg-brand-700 hover:bg-brand-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-brand-700 transition-all transform hover:-translate-y-1 hover:shadow-xl disabled:opacity-50 disabled:cursor-not-allowed"
                                 >
-                                    {status === 'loading' ? 'Procesando...' : 'Confirmar Disponibilidad'}
+                                    {status === 'loading' ? 'Procesando...' : 'Solicitar Presupuesto'}
                                 </button>
                             </div>
 
@@ -256,6 +286,16 @@ const Agenda = () => {
                                             </div>
                                         </div>
                                     </div>
+                                </div>
+                            )}
+
+                            {status === 'error' && (
+                                <div role="alert" className="rounded-lg bg-danger-500/10 p-4 border border-danger-500/40">
+                                    <h3 className="text-sm font-medium text-danger-700">No pudimos enviar tu solicitud</h3>
+                                    <p className="mt-2 text-sm text-danger-700">
+                                        Revisá tu conexión e intentá de nuevo. Si el problema sigue,
+                                        escribinos por WhatsApp y lo resolvemos al momento.
+                                    </p>
                                 </div>
                             )}
                         </form>
