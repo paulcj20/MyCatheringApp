@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { FiMenu, FiX } from 'react-icons/fi';
+import logo from '../assets/images/logo-circular.png';
 
 const Navbar = () => {
     const [isOpen, setIsOpen] = useState(false);
@@ -17,8 +18,11 @@ const Navbar = () => {
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div className="flex items-center justify-between h-20">
                     <div className="flex-shrink-0">
-                        <a href="#" className="font-serif text-3xl font-bold text-white tracking-wide">
-                            MyCatering
+                        <a href="#home" className="flex items-center gap-3">
+                            <img src={logo} alt="E&E Gastronomía" className="h-12 w-12" />
+                            <span className="font-serif text-2xl font-bold text-white tracking-wide">
+                                E&amp;E Gastronomía
+                            </span>
                         </a>
                     </div>
                     <div className="hidden md:block">

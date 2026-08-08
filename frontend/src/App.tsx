@@ -13,7 +13,7 @@ function App() {
       <Services />
       <Agenda />
       {/* Visual Separator */}
-      <hr className="border-t border-gray-200" />
+      <hr className="border-t border-ink-200" />
       <Contact />
       <Footer />
     </div>

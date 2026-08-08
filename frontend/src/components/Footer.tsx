@@ -1,4 +1,5 @@
 import { FaInstagram, FaFacebookF, FaWhatsapp, FaMapMarkerAlt, FaPhoneAlt, FaEnvelope } from 'react-icons/fa';
+import logo from '../assets/images/logo-circular.png';
 
 const Footer = () => {
     return (
@@ -7,7 +8,12 @@ const Footer = () => {
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 lg:gap-8">
                     {/* Brand Column */}
                     <div className="space-y-6">
-                        <span className="font-serif text-3xl font-bold text-white tracking-wide">MyCatering</span>
+                        <div className="flex items-center gap-3">
+                            <img src={logo} alt="E&E Gastronomía" className="h-14 w-14" />
+                            <span className="font-serif text-2xl font-bold text-white tracking-wide">
+                                E&amp;E Gastronomía
+                            </span>
+                        </div>
                         <p className="text-ink-300 text-sm leading-relaxed pr-4">
                             Elevando estándares culinarios. Momentos inolvidables, sabores exquisitos y un servicio que supera expectativas.
                         </p>
