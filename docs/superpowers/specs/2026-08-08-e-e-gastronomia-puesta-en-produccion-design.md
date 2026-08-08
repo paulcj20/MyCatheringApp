@@ -115,20 +115,30 @@ con el sitio comercial.
 
 ### Flujo de datos
 
+Las reservas entran por **dos puertas**, y la web es la menos transitada. La mayoría llega
+por WhatsApp, Instagram o teléfono, y esas las carga el equipo a mano.
+
 ```
-Formulario público (landing, eyegastronomia.com)
-    │  POST /api/bookings  (CORS: solo eyegastronomia.com)
+PUERTA 1 — Formulario público (landing, eyegastronomia.com)
+    │  POST /api/bookings   (CORS: solo eyegastronomia.com)
     ▼
-Ruta API en wacrm (admin.eyegastronomia.com)
-    │  valida, aplica rate limit, descarta honeypot
-    ├──► INSERT en bookings (Supabase, vía service role)
-    └──► upsert de contacto por teléfono + tarjeta en el pipeline
+Ruta API pública en wacrm (admin.eyegastronomia.com)
+    │  valida, limita por IP, descarta honeypot
+    │  account_id sale de variable de entorno, nunca del body
     ▼
-Calendario en wacrm  ──►  el equipo ve, confirma o rechaza, y responde por WhatsApp
+RPC SECURITY DEFINER  ──►  INSERT en bookings (source='web')
+
+PUERTA 2 — Alta manual desde el calendario (equipo autenticado)
+    │  busca un contacto existente o carga uno nuevo por teléfono
+    ▼
+INSERT en bookings (source='whatsapp' | 'instagram' | 'telefono' | …)
+
+AMBAS  ──►  upsert de contacto por teléfono + tarjeta en el pipeline
+       ──►  Calendario: el equipo ve, confirma o rechaza, y responde por WhatsApp
 ```
 
-La creación del contacto es **best-effort**: si falla, la reserva ya quedó guardada y el
-error se registra. Una reserva nunca se pierde porque el CRM falle.
+La creación del contacto y de la tarjeta es **best-effort**: si falla, la reserva ya quedó
+guardada y el error se registra. Una reserva nunca se pierde porque el CRM falle.
 
 ## Componentes
 
@@ -241,47 +251,88 @@ Es la **única superficie expuesta a internet sin autenticación**, así que con
 defensas: validación de esquema en el servidor, límite de tasa por IP, descarte por
 honeypot, y longitudes máximas en todos los campos de texto.
 
-Usa la **service role key** de Supabase desde el servidor, nunca la anon key desde el
-navegador. Así la RLS de `bookings` puede quedar cerrada a lectura pública.
+**No usa la service role key.** El spike encontró un precedente mejor dentro del propio
+wacrm: la ruta pública `/api/invitations/[token]/peek` resuelve el mismo problema llamando a
+un RPC `SECURITY DEFINER` en lugar de exponer una clave con permisos totales. El endpoint de
+reservas sigue ese patrón — la clave anónima queda habilitada para una sola operación de
+contrato fijo, y la service role nunca aparece en una superficie pública.
+
+**El `account_id` sale de una variable de entorno del servidor, nunca del cuerpo del
+pedido.** Si viniera en el JSON, cualquiera podría escribir reservas en la cuenta de otro.
 
 CORS restringido a `https://eyegastronomia.com`.
 
 ### 6. Tabla `bookings` y RLS
 
-**Qué hace:** persiste las reservas.
+**Qué hace:** persiste las reservas, vengan de donde vengan.
 **Interfaz:** esquema Postgres + políticas RLS.
-**Depende de:** las convenciones de wacrm.
+**Depende de:** las convenciones de wacrm, ya determinadas por el spike.
 
 `event_date` es **`date`**, no texto, y `event_time` es `time`. Índice sobre `event_date`,
-que es la columna por la que consulta el calendario y por la que se resolverá la
-disponibilidad.
+que es la columna por la que consulta el calendario.
 
 Estado de la reserva: `pendiente | confirmada | rechazada`.
 
-**La tabla debe seguir el mismo patrón de `team_id` y RLS que las tablas existentes de
-wacrm.** Si no, el panel devuelve filas vacías (política que bloquea) o filas de otros
-equipos. Determinar ese patrón es la primera tarea de implementación, no algo a suponer.
+**Columna `source`**: `web | whatsapp | instagram | telefono | presencial | otro`. Las
+reservas llegan por varios canales y la web es solo uno; registrar el origen cuesta nada y a
+los seis meses dice por qué canal entra el trabajo.
+
+**Patrón de tenencia, confirmado por el spike:** la columna es **`account_id`**, no
+`team_id`. Cada tabla lleva exactamente cuatro políticas nombradas `<tabla>_select`,
+`_insert`, `_update`, `_delete`, apoyadas en la función `is_account_member(account_id,
+min_role)`, que es `SECURITY DEFINER` para no recursar sobre RLS. Jerarquía de roles:
+`owner > admin > agent > viewer`. Leer exige cualquier miembro; escribir datos exige
+`agent`; la configuración exige `admin`.
+
+> **Trampa:** las filas llevan **`user_id` y `account_id` a la vez**. `user_id` viene de la
+> migración 001 y sigue siendo `NOT NULL`; `account_id` lo agregó la 017. Un `INSERT` que
+> ponga solo uno falla.
+
+Las migraciones son idempotentes por convención y se numeran `NNN_nombre.sql`. La última
+existente es la `036`.
 
 ### 7. Página de calendario (en wacrm)
 
-**Qué hace:** le da al equipo la vista de agenda que wacrm no tiene.
+**Qué hace:** es la **agenda operativa del negocio**, no un visor de lo que llega por la web.
 **Interfaz:** una ruta nueva en el fork, dentro de su layout autenticado.
 **Depende de:** la tabla `bookings`, el layout y el Auth de wacrm.
 
-Grilla mensual con las reservas ubicadas por fecha, más lista lateral del mes. Al hacer clic
-en una reserva se abre el detalle con todos los datos del formulario, se puede cambiar el
-estado, y hay un enlace a la conversación del contacto en el inbox.
+La mayoría de las reservas de un catering llegan por WhatsApp, Instagram o teléfono. Un panel
+que solo muestre las del formulario haría que el equipo llevara la agenda real en otro lado y
+quedaría muerto en un mes. Por eso **el alta manual es el flujo principal**, no un extra.
+
+Grilla mensual con las reservas ubicadas por fecha, más lista lateral del mes. Clic en un día
+abre el alta; clic en una reserva abre el detalle, permite cambiar el estado y enlaza a la
+conversación del contacto en el inbox.
+
+En el alta manual el cliente **casi siempre ya existe** en el CRM, porque vienen hablando por
+WhatsApp. El formulario deja buscar un contacto existente o cargar uno nuevo por teléfono.
+
+**Conflictos de fecha: solo se avisa, no se bloquea.** La grilla muestra cuántas reservas hay
+por día y el alta advierte al cargar sobre una fecha ocupada, pero deja seguir. No hay
+restricción en la base. Un sistema que bloquea antes de saber cómo trabaja el equipo genera
+trabajo en la sombra: el día que necesiten meter un evento extra y no puedan, lo anotan en un
+papel y el panel deja de reflejar la realidad. La restricción dura se evalúa después, con
+datos reales de cuántos días se superponen.
 
 Reutiliza el layout, el sidebar y la sesión de wacrm. No se construye login propio.
 
 ### 8. Integración con el CRM
 
 **Qué hace:** hace que cada reserva sea accionable por WhatsApp.
-**Interfaz:** llamada interna desde la ruta API.
+**Interfaz:** llamada interna desde la ruta API y desde el alta manual.
 **Depende de:** el esquema de contactos y pipelines de wacrm.
 
 Al crear una reserva: upsert del contacto **deduplicando por teléfono**, y creación de una
 tarjeta en el pipeline con la fecha del evento y un enlace a la reserva.
+
+**La deduplicación ya está resuelta en la base**, según el spike: `contacts` tiene una
+columna generada `phone_normalized` (solo dígitos) con un índice `UNIQUE (account_id,
+phone_normalized)`. Alcanza con un `ON CONFLICT`; no hay que escribir lógica de matcheo.
+
+Para la tarjeta, `deals` ya tiene `expected_close_date DATE`, `value`, `currency`,
+`contact_id` y `conversation_id`. La fecha del evento entra en `expected_close_date` sin
+inventar columnas.
 
 Es **unidireccional y best-effort**: el estado de la tarjeta en el pipeline no vuelve a la
 reserva, y un fallo del CRM no impide guardar la reserva.
