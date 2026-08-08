@@ -69,6 +69,20 @@ function jsonLdPlugin(): Plugin {
 
 export default defineConfig({
   plugins: [react(), jsonLdPlugin()],
+  build: {
+    rollupOptions: {
+      output: {
+        // Separar los vendors del codigo propio. No baja lo que se descarga
+        // en la primera visita — todo esto se usa en la primera pantalla —
+        // pero en cada deploy posterior el visitante solo vuelve a bajar el
+        // chunk de la app, no medio megabyte de librerias sin cambios.
+        manualChunks: {
+          react: ['react', 'react-dom'],
+          motion: ['framer-motion'],
+        },
+      },
+    },
+  },
   test: {
     globals: true,
     environment: 'jsdom',

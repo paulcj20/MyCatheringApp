@@ -41,10 +41,10 @@ const Services = () => {
                     transition={{ duration: 0.6 }}
                     className="text-center"
                 >
-                    <h2 className="text-sm md:text-base text-brand-600 font-semibold tracking-wide uppercase">Nuestros Servicios</h2>
-                    <p className="mt-2 text-2xl sm:text-3xl md:text-4xl leading-8 font-extrabold tracking-tight text-brand-950 font-serif">
+                    <p className="text-sm md:text-base text-brand-600 font-semibold tracking-wide uppercase">Nuestros Servicios</p>
+                    <h2 className="mt-2 text-2xl sm:text-3xl md:text-4xl leading-8 font-extrabold tracking-tight text-brand-950 font-serif">
                         Excelencia en Cada Detalle
-                    </p>
+                    </h2>
                     <p className="mt-4 max-w-2xl text-lg md:text-xl text-ink-500 mx-auto">
                         Ofrecemos soluciones integrales de catering adaptadas a la esencia de su evento.
                     </p>

@@ -1,6 +1,10 @@
-import { useState } from 'react';
-import DatePicker from 'react-datepicker';
+import { useState, lazy, Suspense } from 'react';
 import "react-datepicker/dist/react-datepicker.css";
+
+// react-datepicker es la dependencia mas pesada del sitio y solo se usa en
+// este formulario, que esta debajo del pliegue. Cargarlo aparte saca su peso
+// de la primera pintura, que es la que mide Google.
+const DatePicker = lazy(() => import('react-datepicker'));
 import axios from 'axios';
 import { motion } from 'framer-motion';
 import { FaUser, FaEnvelope, FaCalendarAlt, FaClock, FaUsers, FaGlassCheers, FaCommentDots, FaWhatsapp } from 'react-icons/fa';
@@ -54,10 +58,10 @@ const Agenda = () => {
                     viewport={{ once: true, amount: 0.25 }}
                     className="text-center mb-16"
                 >
-                    <h2 className="text-sm md:text-base text-brand-600 font-semibold tracking-wide uppercase">Reservas</h2>
-                    <p className="mt-2 text-3xl sm:text-4xl md:text-5xl font-extrabold text-brand-950 font-serif">
+                    <p className="text-sm md:text-base text-brand-600 font-semibold tracking-wide uppercase">Reservas</p>
+                    <h2 className="mt-2 text-3xl sm:text-4xl md:text-5xl font-extrabold text-brand-950 font-serif">
                         Agenda Online
-                    </p>
+                    </h2>
                     <p className="mt-4 max-w-2xl text-lg text-ink-500 mx-auto">
                         Contanos sobre tu evento y te confirmamos disponibilidad a la brevedad por WhatsApp.
                     </p>
@@ -177,13 +181,21 @@ const Agenda = () => {
                                         <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none z-10">
                                             <FaCalendarAlt className="text-ink-400" />
                                         </div>
-                                        <DatePicker
-                                            selected={formData.eventDate}
-                                            onChange={(date: Date | null) => date && setFormData({ ...formData, eventDate: date })}
-                                            className="block w-full pl-10 rounded-lg border-ink-300 shadow-sm focus:border-brand-500 focus:ring-brand-500 p-3 border"
-                                            minDate={new Date()}
-                                            wrapperClassName="w-full"
-                                        />
+                                        <Suspense
+                                            fallback={
+                                                <div className="block w-full pl-10 rounded-lg border-ink-300 shadow-sm p-3 border text-ink-400">
+                                                    Cargando calendario…
+                                                </div>
+                                            }
+                                        >
+                                            <DatePicker
+                                                selected={formData.eventDate}
+                                                onChange={(date: Date | null) => date && setFormData({ ...formData, eventDate: date })}
+                                                className="block w-full pl-10 rounded-lg border-ink-300 shadow-sm focus:border-brand-500 focus:ring-brand-500 p-3 border"
+                                                minDate={new Date()}
+                                                wrapperClassName="w-full"
+                                            />
+                                        </Suspense>
                                     </div>
                                 </div>
                                 <div>
@@ -277,15 +289,11 @@ const Agenda = () => {
                             </div>
 
                             {status === 'success' && (
-                                <div className="rounded-lg bg-green-50 p-4 border border-green-200">
-                                    <div className="flex">
-                                        <div className="ml-3">
-                                            <h3 className="text-sm font-medium text-green-800">¡Solicitud Recibida!</h3>
-                                            <div className="mt-2 text-sm text-green-700">
-                                                <p>Nuestro equipo coordinará los detalles y te contactará a la brevedad.</p>
-                                            </div>
-                                        </div>
-                                    </div>
+                                <div role="status" className="rounded-lg bg-primary-50 p-4 border border-primary-200">
+                                    <h3 className="text-sm font-medium text-primary-800">¡Solicitud Recibida!</h3>
+                                    <p className="mt-2 text-sm text-primary-700">
+                                        Nuestro equipo coordinará los detalles y te contactará a la brevedad.
+                                    </p>
                                 </div>
                             )}
 

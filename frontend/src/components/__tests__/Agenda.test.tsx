@@ -59,6 +59,24 @@ it('incluye el honeypot vacio en un envio legitimo', async () => {
     expect(payload.contactPreference).toBe('');
 });
 
+it('confirma y limpia el formulario cuando el envio tiene exito', async () => {
+    const user = userEvent.setup();
+    mockedPost.mockResolvedValue({ data: {} });
+    render(<Agenda />);
+    await fill(user);
+    await user.click(screen.getByRole('button', { name: /solicitar/i }));
+
+    // role="status" para que un lector de pantalla anuncie el resultado,
+    // igual que role="alert" hace con el error.
+    expect(await screen.findByRole('status')).toHaveTextContent(/solicitud recibida/i);
+
+    // Los campos vuelven vacios: si el reset se rompe, el visitante reenvia
+    // sus datos sin darse cuenta.
+    expect(screen.getByLabelText(/nombre completo/i)).toHaveValue('');
+    expect(screen.getByLabelText(/^email$/i)).toHaveValue('');
+    expect(screen.getByLabelText(/whatsapp/i)).toHaveValue('');
+});
+
 it('muestra un mensaje de error visible cuando el envio falla', async () => {
     const user = userEvent.setup();
     mockedPost.mockRejectedValue(new Error('network down'));
