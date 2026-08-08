@@ -39,10 +39,10 @@ const Footer = () => {
                     <div>
                         <h3 className="text-white font-serif text-lg font-semibold mb-6 tracking-wide">Explorar</h3>
                         <ul className="space-y-4">
-                            <li><a href="#home" className="text-ink-300 hover:text-primary-400 hover:pl-1 transition-all">Inicio</a></li>
-                            <li><a href="#services" className="text-ink-300 hover:text-primary-400 hover:pl-1 transition-all">Servicios</a></li>
-                            <li><a href="#agenda" className="text-ink-300 hover:text-primary-400 hover:pl-1 transition-all">Reservar Fecha</a></li>
-                            <li><a href="#contact" className="text-ink-300 hover:text-primary-400 hover:pl-1 transition-all">Contacto</a></li>
+                            <li><a href="#home" className="text-ink-300 hover:text-white hover:pl-1 transition-all">Inicio</a></li>
+                            <li><a href="#services" className="text-ink-300 hover:text-white hover:pl-1 transition-all">Servicios</a></li>
+                            <li><a href="#agenda" className="text-ink-300 hover:text-white hover:pl-1 transition-all">Reservar Fecha</a></li>
+                            <li><a href="#contact" className="text-ink-300 hover:text-white hover:pl-1 transition-all">Contacto</a></li>
                         </ul>
                     </div>
 
@@ -50,10 +50,10 @@ const Footer = () => {
                     <div>
                         <h3 className="text-white font-serif text-lg font-semibold mb-6 tracking-wide">Servicios</h3>
                         <ul className="space-y-4">
-                            <li><a href="#services" className="text-ink-300 hover:text-primary-400 hover:pl-1 transition-all">Bodas & Uniones</a></li>
-                            <li><a href="#services" className="text-ink-300 hover:text-primary-400 hover:pl-1 transition-all">Eventos Corporativos</a></li>
-                            <li><a href="#services" className="text-ink-300 hover:text-primary-400 hover:pl-1 transition-all">Cenas Privadas</a></li>
-                            <li><a href="#services" className="text-ink-300 hover:text-primary-400 hover:pl-1 transition-all">Cocktail Parties</a></li>
+                            <li><a href="#services" className="text-ink-300 hover:text-white hover:pl-1 transition-all">Bodas & Uniones</a></li>
+                            <li><a href="#services" className="text-ink-300 hover:text-white hover:pl-1 transition-all">Eventos Corporativos</a></li>
+                            <li><a href="#services" className="text-ink-300 hover:text-white hover:pl-1 transition-all">Cenas Privadas</a></li>
+                            <li><a href="#services" className="text-ink-300 hover:text-white hover:pl-1 transition-all">Cocktail Parties</a></li>
                         </ul>
                     </div>
 
@@ -62,15 +62,15 @@ const Footer = () => {
                         <h3 className="text-white font-serif text-lg font-semibold mb-6 tracking-wide">Contacto</h3>
                         <ul className="space-y-5">
                             <li className="flex items-start group">
-                                <FaMapMarkerAlt className="mt-1.5 mr-3 text-primary-500 group-hover:text-primary-400 transition-colors" />
+                                <FaMapMarkerAlt className="mt-1.5 mr-3 text-ink-300 group-hover:text-white transition-colors" />
                                 <span className="text-ink-300 group-hover:text-white transition-colors">{`${siteConfig.address.city}, ${siteConfig.address.country}`}</span>
                             </li>
                             <li className="flex items-center group">
-                                <FaPhoneAlt className="mr-3 text-primary-500 group-hover:text-primary-400 transition-colors" />
+                                <FaPhoneAlt className="mr-3 text-ink-300 group-hover:text-white transition-colors" />
                                 <span className="text-ink-300 group-hover:text-white transition-colors">{siteConfig.phoneDisplay}</span>
                             </li>
                             <li className="flex items-center group">
-                                <FaEnvelope className="mr-3 text-primary-500 group-hover:text-primary-400 transition-colors" />
+                                <FaEnvelope className="mr-3 text-ink-300 group-hover:text-white transition-colors" />
                                 <span className="text-ink-300 group-hover:text-white transition-colors">{siteConfig.email}</span>
                             </li>
                         </ul>

@@ -31,7 +31,7 @@ const Hero = () => {
                     className="text-5xl md:text-7xl lg:text-8xl font-bold text-white font-serif mb-8 drop-shadow-[0_4px_4px_rgba(0,0,0,0.5)] tracking-tight leading-tight"
                 >
                     Arte Culinario para <br />
-                    <span className="text-primary-400 italic font-light">Momentos Inolvidables</span>
+                    <span className="text-ink-100 italic font-light">Momentos Inolvidables</span>
                 </motion.h1>
 
                 <motion.p
@@ -54,7 +54,7 @@ const Hero = () => {
                     {/* Primary Button: Vinoso Solid */}
                     <a
                         href="#agenda"
-                        className="group relative px-10 py-5 bg-brand-700 text-white text-lg font-bold rounded-none uppercase tracking-[0.2em] overflow-hidden transition-all duration-300 hover:bg-brand-800 hover:shadow-[0_0_40px_rgba(105,19,22,0.6)] transform hover:-translate-y-1 border border-primary-500/40"
+                        className="group relative px-10 py-5 bg-brand-700 text-white text-lg font-bold rounded-none uppercase tracking-[0.2em] overflow-hidden transition-all duration-300 hover:bg-brand-800 hover:shadow-[0_0_40px_rgba(105,19,22,0.6)] transform hover:-translate-y-1"
                     >
                         <span className="relative z-10 drop-shadow-md">Reservar Fecha</span>
                         <div className="absolute top-0 -inset-full h-full w-1/2 z-5 block transform -skew-x-12 bg-gradient-to-r from-transparent to-white opacity-20 group-hover:animate-shine" />

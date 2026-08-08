@@ -34,7 +34,7 @@ const Navbar = () => {
                                     className="relative group text-ink-200 hover:text-white px-3 py-2 rounded-md text-sm font-medium uppercase tracking-wide transition-all duration-300 ease-in-out transform hover:-translate-y-1"
                                 >
                                     {link.name}
-                                    <span className="absolute bottom-0 left-0 w-full h-0.5 bg-primary-500 transform scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-left"></span>
+                                    <span className="absolute bottom-0 left-0 w-full h-0.5 bg-ink-100 transform scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-left"></span>
                                 </a>
                             ))}
                         </div>
