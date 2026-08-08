@@ -7,6 +7,7 @@ import "react-datepicker/dist/react-datepicker.css";
 const DatePicker = lazy(() => import('react-datepicker'));
 import axios from 'axios';
 import { motion } from 'framer-motion';
+import { toIsoDate } from '../date';
 import { FaUser, FaEnvelope, FaCalendarAlt, FaClock, FaUsers, FaGlassCheers, FaCommentDots, FaWhatsapp } from 'react-icons/fa';
 
 const Agenda = () => {
@@ -34,7 +35,7 @@ const Agenda = () => {
             const apiBase = import.meta.env.VITE_API_BASE_URL ?? '';
             await axios.post(`${apiBase}/api/bookings`, {
                 ...formData,
-                eventDate: formData.eventDate.toISOString().split('T')[0],
+                eventDate: toIsoDate(formData.eventDate),
                 eventTime: formattedTime
             });
             setStatus('success');
