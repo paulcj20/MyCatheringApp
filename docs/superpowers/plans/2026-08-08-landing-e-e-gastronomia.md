@@ -817,7 +817,8 @@ cd frontend && npm install -D vitest@^3 jsdom @testing-library/react @testing-li
 Reemplazar el contenido de `frontend/vite.config.ts` por:
 
 ```ts
-import { defineConfig } from 'vite'
+// https://vite.dev/config/
+import { defineConfig } from 'vitest/config'
 import react from '@vitejs/plugin-react'
 
 export default defineConfig({
@@ -829,6 +830,12 @@ export default defineConfig({
   },
 })
 ```
+
+`defineConfig` se importa de **`vitest/config`**, no de `vite`. El tipo de `vite` no conoce la
+propiedad `test` y `tsc -b` la rechaza. Un comentario `/// <reference types="vitest" />` también
+funcionaría, pero el import es preferible: es portante. Si una reescritura posterior del archivo
+lo cambia por `vite`, `tsc` falla de inmediato en `test:`; un comentario suelto se pierde sin que
+nada se queje y el type-checking desaparece en silencio.
 
 - [ ] **Step 3: Crear el archivo de setup**
 
@@ -1206,7 +1213,11 @@ Reemplazar el contenido de `frontend/vite.config.ts` por lo siguiente. **Conserv
 `test` que agregó la Tarea 5** — no borrarlo.
 
 ```ts
-import { defineConfig, type Plugin } from 'vite'
+// https://vite.dev/config/
+// defineConfig viene de 'vitest/config', no de 'vite': es lo que hace que la
+// propiedad `test` type-checkee. Si esto vuelve a 'vite', tsc falla en `test:`.
+import { defineConfig } from 'vitest/config'
+import type { Plugin } from 'vite'
 import react from '@vitejs/plugin-react'
 import { siteConfig } from './src/site'
 
