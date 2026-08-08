@@ -32,7 +32,7 @@ const services = [
 
 const Services = () => {
     return (
-        <section id="services" className="py-12 md:py-24 bg-white">
+        <section id="services" className="py-12 md:py-24 bg-surface">
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <motion.div
                     initial={{ opacity: 0, y: 20 }}
@@ -41,11 +41,11 @@ const Services = () => {
                     transition={{ duration: 0.6 }}
                     className="text-center"
                 >
-                    <h2 className="text-sm md:text-base text-accent-600 font-semibold tracking-wide uppercase">Nuestros Servicios</h2>
-                    <p className="mt-2 text-2xl sm:text-3xl md:text-4xl leading-8 font-extrabold tracking-tight text-gray-900 font-serif">
+                    <h2 className="text-sm md:text-base text-brand-600 font-semibold tracking-wide uppercase">Nuestros Servicios</h2>
+                    <p className="mt-2 text-2xl sm:text-3xl md:text-4xl leading-8 font-extrabold tracking-tight text-brand-950 font-serif">
                         Excelencia en Cada Detalle
                     </p>
-                    <p className="mt-4 max-w-2xl text-lg md:text-xl text-gray-500 mx-auto">
+                    <p className="mt-4 max-w-2xl text-lg md:text-xl text-ink-500 mx-auto">
                         Ofrecemos soluciones integrales de catering adaptadas a la esencia de su evento.
                     </p>
                 </motion.div>
@@ -56,15 +56,15 @@ const Services = () => {
                         {[...services, ...services].map((service, index) => (
                             <div
                                 key={`${service.title}-${index}`}
-                                className="flex-shrink-0 w-80 md:w-96 group relative bg-white rounded-2xl shadow-xl overflow-hidden hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 border border-gray-100 mx-4"
+                                className="flex-shrink-0 w-80 md:w-96 group relative bg-surface rounded-2xl shadow-xl overflow-hidden hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 border border-ink-200 mx-4"
                             >
                                 <div className="h-48 w-full overflow-hidden">
                                     <img src={service.image} alt={service.title} className="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-500" />
                                 </div>
                                 <div className="p-6 md:p-8">
                                     <div className="text-4xl mb-4">{service.icon === 'tophat' ? '🎩' : service.icon}</div>
-                                    <h3 className="text-xl font-bold text-gray-900 font-serif mb-2">{service.title}</h3>
-                                    <p className="text-gray-500">{service.description}</p>
+                                    <h3 className="text-xl font-bold text-brand-950 font-serif mb-2">{service.title}</h3>
+                                    <p className="text-ink-500">{service.description}</p>
                                 </div>
                             </div>
                         ))}
