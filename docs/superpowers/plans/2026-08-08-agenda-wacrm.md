@@ -28,6 +28,17 @@ El despliegue es un plan aparte y requiere el dominio configurado.
   del servidor), nunca del cuerpo del pedido.
 - **Los conflictos de fecha se avisan, no se bloquean.** No hay constraint de unicidad sobre
   `event_date`.
+- **Nunca parsear una fecha con `new Date("YYYY-MM-DD")`.** Un string ISO solo-fecha se
+  interpreta como medianoche **UTC**; en Montevideo (UTC−3) eso cae el día anterior a las
+  21:00, y `getDay()` / `getDate()` devuelven el día equivocado. En un calendario de reservas
+  eso significa mostrar un casamiento el 23 cuando es el 24. Reglas concretas:
+  - `event_date` viaja siempre como string `YYYY-MM-DD` y se compara **como string**.
+  - Las claves de día se arman con plantilla (`` `${y}-${pad(m)}-${pad(d)}` ``), nunca con
+    `toISOString()`, que convierte a UTC.
+  - Cuando haga falta un `Date` real, usar el constructor **local** de tres argumentos:
+    `new Date(year, monthIndex, day)`. Ese sí respeta la zona horaria de la máquina.
+  - Esto no es teórico: dos tests del upstream (`src/lib/dashboard/date-utils.test.ts`)
+    fallan en cualquier huso negativo por exactamente este motivo.
 - **El fork se crea con remote a upstream** para poder traer correcciones.
 - Textos de interfaz en inglés y coreano (`messages/en.json`, `messages/ko.json`), siguiendo
   el patrón `labelKey` del sidebar.
@@ -280,28 +291,40 @@ Esperado exactamente cuatro filas: `bookings_delete` (DELETE), `bookings_insert`
 Este es el paso que evita el fallo silencioso más caro del proyecto: una política mal
 puesta hace que el calendario devuelva vacío sin ningún error.
 
-En el SQL Editor (que corre como `postgres` y evita RLS), insertar una fila de prueba
-reemplazando los dos UUID por los de tu cuenta:
+No alcanza con comprobar que el dueño ve la fila: hay que comprobar también que **alguien de
+otra cuenta no la ve**. Una política que admite a todos pasa la primera mitad de la prueba y
+falla en lo único que importa.
+
+En el SQL Editor, que corre como `postgres` y evita RLS, insertar una fila de prueba con los
+UUID reales de la cuenta:
 
 ```sql
 INSERT INTO bookings (account_id, user_id, client_name, phone, event_date, source)
-VALUES ('<TU_ACCOUNT_ID>', '<TU_USER_ID>', 'Prueba RLS', '59891908707', CURRENT_DATE, 'otro');
+VALUES ('<ACCOUNT_ID>', '<USER_ID>', 'Prueba RLS', '59891908707', CURRENT_DATE, 'otro');
+
+-- ¿La ve el dueño de la cuenta?
+BEGIN;
+  SELECT set_config('request.jwt.claims',
+    '{"sub":"<USER_ID>","role":"authenticated"}', true);
+  SET LOCAL ROLE authenticated;
+  SELECT count(*) AS visibles_para_el_dueno FROM bookings;
+ROLLBACK;
+
+-- ¿La ve alguien de otra cuenta?
+BEGIN;
+  SELECT set_config('request.jwt.claims',
+    '{"sub":"00000000-0000-0000-0000-000000000000","role":"authenticated"}', true);
+  SET LOCAL ROLE authenticated;
+  SELECT count(*) AS visibles_para_un_extrano FROM bookings;
+ROLLBACK;
 ```
 
-Luego, **desde la aplicación** (no desde el SQL Editor), con la sesión iniciada, abrir la
-consola del navegador en `http://localhost:3000/dashboard` y ejecutar:
+`set_config('request.jwt.claims', …)` es de donde `auth.uid()` lee el usuario, así que esto
+simula una sesión real sin necesitar el navegador.
 
-```js
-const { data, error } = await window.__supabase.from('bookings').select('*');
-console.log({ data, error });
-```
-
-Si `window.__supabase` no está expuesto, usar en su lugar la página de prueba de la Tarea 6
-y postergar esta verificación hasta ahí, anotándolo.
-
-Esperado: `data` trae la fila `Prueba RLS`. Si viene vacío sin error, la política de SELECT
-no está reconociendo al usuario — revisar que `profiles.account_id` del usuario coincida con
-el `account_id` de la fila.
+**Esperado: `1` y `0`.** Si la primera da `0`, la política de SELECT no reconoce al dueño y
+el calendario va a salir vacío sin ningún error. Si la segunda da `1`, la RLS no aísla y cada
+cuenta vería las reservas de las demás.
 
 - [ ] **Step 6: Limpiar la fila de prueba y commitear**
 
