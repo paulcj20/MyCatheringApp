@@ -17,7 +17,7 @@ const services = [
         title: 'Cumpleaños & Social',
         description: 'Celebraciones vibrantes y emotivas, donde cada detalle refleja su alegría.',
         icon: '🎂',
-        image: 'https://images.unsplash.com/photo-1530103862676-de3c9a59af38?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80',
+        image: 'https://images.unsplash.com/photo-1528605248644-14dd04022da1?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80',
     },
     {
         title: 'Fiestas Privadas',
@@ -50,7 +50,7 @@ const Services = () => {
                     </p>
                 </motion.div>
 
-                <div className="mt-12 md:mt-20 relative w-full overflow-hidden mask-gradient-x">
+                <div className="mt-12 md:mt-20 mb-12 relative w-full overflow-hidden mask-gradient-x pb-8">
                     <div className="flex w-max hover:pause animate-scroll gap-8">
                         {/* First set of items */}
                         {[...services, ...services].map((service, index) => (

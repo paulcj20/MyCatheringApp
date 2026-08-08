@@ -1,4 +1,3 @@
-import { motion } from 'framer-motion';
 import { FaInstagram, FaFacebookF, FaWhatsapp, FaMapMarkerAlt, FaPhoneAlt, FaEnvelope } from 'react-icons/fa';
 
 const Footer = () => {
@@ -8,7 +7,7 @@ const Footer = () => {
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 lg:gap-8">
                     {/* Brand Column */}
                     <div className="space-y-6">
-                        <span className="font-serif text-3xl font-bold text-white tracking-wide">MyCathering</span>
+                        <span className="font-serif text-3xl font-bold text-white tracking-wide">MyCatering</span>
                         <p className="text-gray-400 text-sm leading-relaxed pr-4">
                             Elevando estándares culinarios. Momentos inolvidables, sabores exquisitos y un servicio que supera expectativas.
                         </p>
@@ -61,7 +60,7 @@ const Footer = () => {
                             </li>
                             <li className="flex items-center group">
                                 <FaEnvelope className="mr-3 text-accent-500 group-hover:text-accent-400 transition-colors" />
-                                <span className="text-gray-400 group-hover:text-white transition-colors">hola@mycathering.com</span>
+                                <span className="text-gray-400 group-hover:text-white transition-colors">hola@mycatering.com</span>
                             </li>
                         </ul>
                     </div>
@@ -69,7 +68,7 @@ const Footer = () => {
 
                 <div className="mt-16 pt-8 border-t border-gray-800 flex flex-col md:flex-row justify-between items-center">
                     <p className="text-sm text-gray-500">
-                        &copy; 2026 MyCathering. Todos los derechos reservados.
+                        &copy; 2026 MyCatering. Todos los derechos reservados.
                     </p>
                     <div className="flex space-x-8 mt-4 md:mt-0 text-sm text-gray-500">
                         <a href="#" className="hover:text-white transition-colors">Política de Privacidad</a>

@@ -10,6 +10,10 @@ frontend/build/
 frontend/.env
 frontend/.env.local
 frontend/.DS_Store
+frontend/.firebase/
+
+# Superpowers scratch (ledgers, briefs, review packages)
+.superpowers/
 
 # General
 .DS_Store

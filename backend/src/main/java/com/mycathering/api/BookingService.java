@@ -1,56 +1,58 @@
 package com.mycathering.api;
 
+import com.google.cloud.firestore.DocumentReference;
 import com.google.cloud.firestore.Firestore;
+import com.google.cloud.firestore.QueryDocumentSnapshot;
+import com.google.cloud.firestore.QuerySnapshot;
+import com.google.api.core.ApiFuture;
 import com.google.firebase.cloud.FirestoreClient;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.time.format.DateTimeFormatter;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.concurrent.ExecutionException;
+import java.util.stream.Collectors;
 
 @Service
 public class BookingService {
 
-    @Autowired
-    private BookingRepository bookingRepository;
-
     public List<Booking> findAll() {
-        return bookingRepository.findAll();
+        try {
+            Firestore db = FirestoreClient.getFirestore();
+            // Asynchronously retrieve all documents
+            ApiFuture<QuerySnapshot> future = db.collection("bookings").get();
+            // future.get() blocks on response
+            List<QueryDocumentSnapshot> documents = future.get().getDocuments();
+
+            return documents.stream()
+                    .map(document -> document.toObject(Booking.class))
+                    .collect(Collectors.toList());
+        } catch (InterruptedException | ExecutionException e) {
+            e.printStackTrace();
+            return List.of();
+        }
     }
 
     public Booking save(Booking booking) {
-        // 1. Save to H2 (Relational DB)
-        Booking savedBooking = bookingRepository.save(booking);
-
-        // 2. Save to Firestore (NoSQL DB)
-        saveToFirestore(savedBooking);
-
-        return savedBooking;
-    }
-
-    private void saveToFirestore(Booking booking) {
         try {
-            Firestore dbFirestore = FirestoreClient.getFirestore();
+            Firestore db = FirestoreClient.getFirestore();
 
-            Map<String, Object> docData = new HashMap<>();
-            docData.put("id", booking.getId());
-            docData.put("clientName", booking.getClientName());
-            docData.put("email", booking.getEmail());
-            docData.put("eventDate", booking.getEventDate().toString());
-            docData.put("eventTime", booking.getEventTime().toString());
-            docData.put("guestCount", booking.getGuestCount());
-            docData.put("eventType", booking.getEventType());
-            docData.put("message", booking.getMessage());
-            docData.put("createdAt", System.currentTimeMillis());
+            if (booking.getId() == null) {
+                // Generate a new ID if not present
+                DocumentReference docRef = db.collection("bookings").document();
+                booking.setId(docRef.getId());
 
-            dbFirestore.collection("bookings").document(String.valueOf(booking.getId())).set(docData);
-            System.out.println("Booking " + booking.getId() + " sent to Firestore async.");
-        } catch (Exception e) {
+                // Write to Firestore (blocking for safety)
+                docRef.set(booking).get();
+            } else {
+                // Write to Firestore with existing ID
+                db.collection("bookings").document(booking.getId()).set(booking).get();
+            }
+
+            System.out.println("Booking " + booking.getId() + " saved to Firestore.");
+            return booking;
+        } catch (InterruptedException | ExecutionException e) {
             e.printStackTrace();
-            System.err.println("Error saving to Firestore: " + e.getMessage());
+            throw new RuntimeException("Failed to save booking to Firestore", e);
         }
     }
 }

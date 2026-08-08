@@ -11,7 +11,7 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("/api/bookings")
-@CrossOrigin(origins = "http://localhost:5173") // Allow frontend access
+@CrossOrigin(origins = { "http://localhost:5173", "https://mycatheringapp.web.app" }) // Allow frontend access
 public class BookingController {
 
     @Autowired

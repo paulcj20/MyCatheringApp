@@ -1,29 +1,22 @@
 package com.mycathering.api;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
-import java.time.LocalDate;
-import java.time.LocalTime;
-
-@Entity
 public class Booking {
 
-    @Id
-    @GeneratedValue
-    private Long id;
+    private String id;
 
     private String clientName;
     private String email;
-    private LocalDate eventDate;
-    private LocalTime eventTime;
+    private String eventDate; // Firestore stores as String for simplicity or we convert
+    private String eventTime;
     private Integer guestCount;
     private String eventType; // Wedding, Corporate, etc.
     private String message;
 
-    public Booking() {}
+    public Booking() {
+    }
 
-    public Booking(String clientName, String email, LocalDate eventDate, LocalTime eventTime, Integer guestCount, String eventType, String message) {
+    public Booking(String clientName, String email, String eventDate, String eventTime, Integer guestCount,
+            String eventType, String message) {
         this.clientName = clientName;
         this.email = email;
         this.eventDate = eventDate;
@@ -33,11 +26,11 @@ public class Booking {
         this.message = message;
     }
 
-    public Long getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(String id) {
         this.id = id;
     }
 
@@ -57,19 +50,19 @@ public class Booking {
         this.email = email;
     }
 
-    public LocalDate getEventDate() {
+    public String getEventDate() {
         return eventDate;
     }
 
-    public void setEventDate(LocalDate eventDate) {
+    public void setEventDate(String eventDate) {
         this.eventDate = eventDate;
     }
 
-    public LocalTime getEventTime() {
+    public String getEventTime() {
         return eventTime;
     }
 
-    public void setEventTime(LocalTime eventTime) {
+    public void setEventTime(String eventTime) {
         this.eventTime = eventTime;
     }
 

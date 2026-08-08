@@ -212,6 +212,7 @@ const Agenda = () => {
                                     >
                                         <option>Bodas</option>
                                         <option>Corporativo</option>
+                                        <option>Cumpleaños</option>
                                         <option>Privado</option>
                                         <option>Otro</option>
                                     </select>
