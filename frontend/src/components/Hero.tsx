@@ -1,5 +1,6 @@
 import { motion } from 'framer-motion';
 import heroVideo from '../assets/videos/hero.mp4';
+import heroPoster from '../assets/images/hero-poster.jpg';
 
 const Hero = () => {
     return (
@@ -12,8 +13,9 @@ const Hero = () => {
                     loop
                     muted
                     playsInline
+                    preload="metadata"
                     className="w-full h-full object-cover opacity-90"
-                    poster="https://images.unsplash.com/photo-1555244162-803834f70033?ixlib=rb-1.2.1&auto=format&fit=crop&w=1950&q=80"
+                    poster={heroPoster}
                 >
                     <source src={heroVideo} type="video/mp4" />
                     Your browser does not support the video tag.

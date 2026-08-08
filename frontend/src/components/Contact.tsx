@@ -16,7 +16,7 @@ const Contact = () => {
                     viewport={{ once: true, amount: 0.25 }}
                     className="text-center mb-16"
                 >
-                    <h2 className="text-sm md:text-base text-brand-600 font-semibold tracking-wide uppercase">Contacto</h2>
+                    <p className="text-sm md:text-base text-brand-600 font-semibold tracking-wide uppercase">Contacto</p>
                     <h2 className="mt-2 text-3xl sm:text-4xl md:text-5xl font-extrabold text-brand-950 font-serif">
                         Hablemos de su Evento
                     </h2>
