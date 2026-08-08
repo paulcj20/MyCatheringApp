@@ -29,6 +29,9 @@ fork de wacrm y van en un plan aparte, que requiere el spike previo. El componen
   ~2.3:1, debajo del mínimo 4.5:1 de WCAG AA. El relleno primario es el vinoso.
 - **El ámbar/dorado se elimina por completo.** Ninguna clase `accent-*` debe quedar en el
   código al terminar la Tarea 2.
+- **La rampa `gray-*` de Tailwind se elimina por completo**, reemplazada por los neutros
+  cálidos `ink-*`. Los grises de Tailwind son fríos y azulados y se ven sucios contra el
+  vinoso y el fondo crema. Ninguna clase `gray-*` debe quedar al terminar la Tarea 2.
 - **Idioma del sitio: español.** `<html lang="es">`.
 - Los textos de cara al usuario no prometen verificación instantánea de disponibilidad
   mientras esa función no exista.
@@ -50,7 +53,8 @@ fork de wacrm y van en un plan aparte, que requiere el spike previo. El componen
 | `frontend/src/components/Contact.tsx` | Datos de contacto + consulta por WhatsApp |
 | `frontend/src/components/Footer.tsx` | Pie |
 | `frontend/src/App.tsx` | Composición de secciones |
-| `frontend/index.html` | Metadatos de SEO y JSON-LD |
+| `frontend/index.html` | Metadatos de SEO (title, description, Open Graph) |
+| `frontend/vite.config.ts` | Config de Vite + Vitest + plugin que inyecta el JSON-LD |
 | `frontend/public/` | favicon, `og-image.jpg`, `robots.txt`, `sitemap.xml` |
 | `frontend/src/assets/images/logo-circular.png` | Logo con fondo transparente |
 | `scripts/build-brand-assets.py` | **Nuevo.** Genera logo circular, favicons y OG |
@@ -147,6 +151,22 @@ logo; el resto de la escala se deriva de esos dos.
   --color-danger-500: #ff3131;
   --color-danger-600: #e51b1b;
   --color-danger-700: #c01414;
+
+  /* Neutros calidos. Reemplazan la rampa gray-* de Tailwind, que es fria y
+     azulada y se ve sucia contra el vinoso y el fondo crema.
+     Contraste verificado sobre surface (#fdfbf7): ink-500 4.6:1, ink-600 6:1.
+     Sobre brand-800 (#560f12): ink-300 7:1, ink-200 9.3:1. */
+  --color-ink-50: #faf7f6;
+  --color-ink-100: #f2ecea;
+  --color-ink-200: #e4dad7;
+  --color-ink-300: #cbbcb8;
+  --color-ink-400: #a8938e;
+  --color-ink-500: #877069;
+  --color-ink-600: #6d5951;
+  --color-ink-700: #5a4842;
+  --color-ink-800: #4a3b36;
+  --color-ink-900: #3d312d;
+  --color-ink-950: #241c1a;
 
   /* Fondo cálido, reemplaza el blanco puro */
   --color-surface: #fdfbf7;
@@ -253,34 +273,70 @@ visual del plan.
 - Modify: `frontend/src/components/Footer.tsx`
 
 **Interfaces:**
-- Consumes: las utilidades `brand-*`, `primary-*`, `danger-*`, `surface` de la Tarea 1.
-- Produces: nada nuevo. Deja el árbol sin ninguna clase `accent-*` ni `gray-900`.
+- Consumes: las utilidades `brand-*`, `primary-*`, `danger-*`, `ink-*`, `surface` de la
+  Tarea 1.
+- Produces: nada nuevo. Deja el árbol sin ninguna clase `accent-*` ni `gray-*`.
 
-Reglas de sustitución, aplicadas en todos los archivos:
+**La rampa `gray-*` se reemplaza completa**, no solo los tonos oscuros. Los grises de
+Tailwind son fríos y azulados; contra el vinoso y el fondo crema se ven sucios. Hay ~90
+apariciones de `gray-*` en los seis componentes y **todas** deben migrar, o el gate del
+Step 7 falla.
+
+**Sustituciones del acento (el ámbar del logo placeholder):**
 
 | Antes | Después | Motivo |
 |---|---|---|
-| `bg-gray-900`, `hover:bg-gray-800` | `bg-brand-700`, `hover:bg-brand-800` | el vinoso es el color estructural |
-| `border-gray-800` | `border-brand-800` | coherencia en superficies oscuras |
-| `focus:ring-gray-900` | `focus:ring-brand-700` | |
 | `text-accent-600` (eyebrow de sección) | `text-brand-600` | |
 | `text-accent-400`, `text-accent-500` | `text-primary-500` | el verde es el acento |
 | `bg-accent-100` | `bg-primary-100` | |
 | `bg-accent-500` (hover de redes) | `bg-brand-700` | evita verde con texto blanco |
 | `hover:text-accent-400` | `hover:text-primary-400` | |
 | `focus:border-accent-500 focus:ring-accent-500` | `focus:border-brand-500 focus:ring-brand-500` | |
-| `bg-white` en secciones | `bg-surface` | fondo cálido |
+
+**Sustituciones en secciones claras** (Hero, Services, Agenda, Contact):
+
+| Antes | Después |
+|---|---|
+| `bg-white` en el `<section>` | `bg-surface` |
+| `text-gray-900` | `text-brand-950` |
+| `text-gray-700` (labels) | `text-ink-700` |
+| `text-gray-600` | `text-ink-600` |
+| `text-gray-500` | `text-ink-500` |
+| `text-gray-400` (iconos dentro de inputs) | `text-ink-400` |
+| `border-gray-300` | `border-ink-300` |
+| `border-gray-200` | `border-ink-200` |
+| `border-gray-100` | `border-ink-200` |
+| `bg-gray-900`, `hover:bg-gray-800` (botones) | `bg-brand-700`, `hover:bg-brand-800` |
+| `focus:ring-gray-900` | `focus:ring-brand-700` |
+
+**Sustituciones en superficies oscuras** (Navbar, Footer). Los tonos se eligen por
+contraste sobre vinoso, que es más oscuro que el `gray-900` original: un swap literal
+de `gray-400` dejaría los links del Footer en ~4.0:1, por debajo del mínimo.
+
+| Antes | Después |
+|---|---|
+| `bg-gray-900` | `bg-brand-700` en Navbar, `bg-brand-800` en Footer |
+| `bg-gray-800`, `hover:bg-gray-800` | `bg-brand-700`, `hover:bg-brand-800` |
+| `border-gray-800` | `border-brand-800` en Navbar, `border-brand-700` en Footer |
+| `text-gray-200` | `text-ink-100` |
+| `text-gray-300` | `text-ink-200` |
+| `text-gray-400` | `text-ink-300` |
+| `text-gray-500` (copyright) | `text-ink-400` |
+
+Las tablas de arriba son la autoridad; cada Step de abajo aplica esas tablas a un archivo y
+solo detalla lo que las tablas no pueden decidir por sí solas. Trabajar por búsqueda de
+contenido, no por número de línea.
 
 - [ ] **Step 1: Migrar Navbar**
 
-En `frontend/src/components/Navbar.tsx`: la barra pasa a vinoso y el subrayado animado de
-los links a verde.
+Aplicar la tabla del acento y la de **superficies oscuras** a
+`frontend/src/components/Navbar.tsx`. La barra pasa a vinoso y el subrayado animado de los
+links a verde.
 
-- Línea 16: `bg-gray-900/95` → `bg-brand-700/95`; `border-gray-800` → `border-brand-800`
-- Línea 33: `bg-accent-500` → `bg-primary-500`
-- Línea 41: `hover:bg-gray-800` → `hover:bg-brand-800`; `focus:ring-offset-gray-900` → `focus:ring-offset-brand-700`
-- Línea 55: `bg-gray-900` → `bg-brand-700`; `border-gray-800` → `border-brand-800`
-- Línea 62: `hover:bg-gray-800` → `hover:bg-brand-800`
+Decisiones propias de este archivo:
+- `bg-gray-900/95` → `bg-brand-700/95` (conservar el `/95` de opacidad)
+- `focus:ring-offset-gray-900` → `focus:ring-offset-brand-700`
+- El panel del menú móvil usa `bg-gray-900` sólido → `bg-brand-700`
 
 - [ ] **Step 2: Migrar Hero**
 
@@ -300,55 +356,58 @@ En `frontend/src/components/Hero.tsx`, reemplazar el `<a>` del botón primario
                     </a>
 ```
 
-- Línea 32: `text-accent-400` → `text-primary-400`
+Y en el `<span>` del subtítulo del `<h1>`: `text-accent-400` → `text-primary-400`.
 
 - [ ] **Step 3: Migrar Services**
 
-- Línea 35: `bg-white` → `bg-surface`
-- Línea 44: `text-accent-600` → `text-brand-600`
-- Línea 45: `text-gray-900` → `text-brand-950`
-- Línea 66: `text-gray-900` → `text-brand-950`
+Aplicar la tabla del acento y la de **secciones claras** a
+`frontend/src/components/Services.tsx`. No tiene decisiones propias.
 
 - [ ] **Step 4: Migrar Agenda**
 
-- Línea 49: `bg-primary-50` → `bg-surface`
-- Línea 51: `bg-accent-100` → `bg-primary-100`
-- Línea 61: `text-accent-600` → `text-brand-600`
-- Líneas 81, 90, 99: `bg-accent-100 text-accent-600` → `bg-primary-100 text-primary-700`
-- Todas las apariciones de `focus:border-accent-500 focus:ring-accent-500` →
-  `focus:border-brand-500 focus:ring-brand-500` (líneas 129, 146, 165, 180, 199, 209, 231)
-- Línea 243: `bg-gray-900 hover:bg-gray-800 focus:ring-gray-900` →
-  `bg-brand-700 hover:bg-brand-800 focus:ring-brand-700`
+Aplicar la tabla del acento y la de **secciones claras** a
+`frontend/src/components/Agenda.tsx`.
+
+Decisiones propias de este archivo:
+- El `<section>` usa `bg-primary-50` (no `bg-white`) → `bg-surface`
+- Los tres círculos de iconos de la columna izquierda usan `bg-accent-100 text-accent-600` →
+  `bg-primary-100 text-primary-700`. Va a `primary-700` y no a `primary-500` porque el verde
+  claro sobre fondo `primary-100` no alcanza contraste suficiente para un icono.
 
 - [ ] **Step 5: Migrar Contact**
 
-- Línea 6: `bg-white` → `bg-surface`
-- Línea 9: `bg-accent-100` → `bg-primary-100`
-- Líneas 18: `text-accent-600` → `text-brand-600`
-- Líneas 110, 119, 128: `bg-accent-100 text-accent-600` → `bg-primary-100 text-primary-700`
-- Líneas 142, 145, 148: `hover:bg-accent-500` → `hover:bg-brand-700`
-- Línea 158: `text-accent-500` → `text-primary-600`
-- Todas las apariciones de `focus:border-accent-500 focus:ring-accent-500` →
-  `focus:border-brand-500 focus:ring-brand-500` (líneas 48, 62, 78)
-- Línea 87: `bg-gray-900 hover:bg-gray-800 focus:ring-gray-900` →
-  `bg-brand-700 hover:bg-brand-800 focus:ring-brand-700`
+Aplicar la tabla del acento y la de **secciones claras** a
+`frontend/src/components/Contact.tsx`.
+
+Decisiones propias de este archivo:
+- Los tres círculos de iconos de información usan `bg-accent-100 text-accent-600` →
+  `bg-primary-100 text-primary-700`, por el mismo motivo que en Agenda
+- El icono del reloj de "Horarios de Atención" usa `text-accent-500` → `text-primary-600`
+- Los círculos de redes usan `bg-primary-50 text-primary-600` con `hover:bg-accent-500
+  hover:text-white` → el hover pasa a `hover:bg-brand-700`, que sí cumple contraste con
+  texto blanco
 
 - [ ] **Step 6: Migrar Footer**
 
-- Línea 5: `bg-gray-900 border-gray-800` → `bg-brand-800 border-brand-700`
-- Líneas 15, 18, 21: `bg-gray-800` → `bg-brand-700`; `hover:bg-accent-500` → `hover:bg-brand-600`
-- Líneas 31-34, 42-45: `hover:text-accent-400` → `hover:text-primary-400`
-- Líneas 54, 58, 62: `text-accent-500 group-hover:text-accent-400` →
+Aplicar la tabla del acento y la de **superficies oscuras** a
+`frontend/src/components/Footer.tsx`.
+
+Decisiones propias de este archivo:
+- El `<footer>` es la superficie más oscura del sitio: `bg-gray-900 border-gray-800` →
+  `bg-brand-800 border-brand-700`
+- Los círculos de redes usan `bg-gray-800` → `bg-brand-700`, con `hover:bg-accent-500` →
+  `hover:bg-brand-600`
+- Los iconos de la columna de contacto usan `text-accent-500 group-hover:text-accent-400` →
   `text-primary-500 group-hover:text-primary-400`
-- Línea 69: `border-gray-800` → `border-brand-700`
 
 - [ ] **Step 7: Verificar que no quedan clases del tema viejo**
 
 ```bash
-cd frontend && grep -rn "accent-\|gray-900\|gray-800" src/components/
+cd frontend && grep -rn "accent-\|gray-" src/components/
 ```
 
-Esperado: **sin resultados**. Cualquier coincidencia es una migración incompleta.
+Esperado: **sin resultados**. Cualquier coincidencia es una migración incompleta. Recorrer las
+tablas de sustitución de arriba hasta que el grep salga vacío.
 
 - [ ] **Step 8: Verificar visualmente**
 
@@ -663,8 +722,8 @@ Reemplazar la lista de horarios (líneas 160-169) por:
 ```tsx
                             <ul className="space-y-4 pl-2">
                                 {siteConfig.hours.map((h) => (
-                                    <li key={h.days} className="flex justify-between items-center text-lg border-b border-dashed border-brand-100 pb-2">
-                                        <span className="text-brand-800 font-medium">{h.days}</span>
+                                    <li key={h.days} className="flex justify-between items-center text-lg border-b border-dashed border-ink-200 pb-2">
+                                        <span className="text-ink-700 font-medium">{h.days}</span>
                                         <span className="text-brand-950 font-bold">{h.opens} - {h.closes}</span>
                                     </li>
                                 ))}
@@ -973,24 +1032,24 @@ y insertar este bloque dentro del primer `grid` del formulario, después del cam
 
 ```tsx
                                 <div>
-                                    <label htmlFor="phone" className="block text-sm font-medium text-brand-800 mb-1">
+                                    <label htmlFor="phone" className="block text-sm font-medium text-ink-700 mb-1">
                                         WhatsApp
                                     </label>
                                     <div className="relative rounded-md shadow-sm">
                                         <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                                            <FaWhatsapp className="text-brand-300" />
+                                            <FaWhatsapp className="text-ink-400" />
                                         </div>
                                         <input
                                             type="tel"
                                             id="phone"
                                             required
-                                            className="block w-full pl-10 rounded-lg border-brand-200 shadow-sm focus:border-brand-500 focus:ring-brand-500 p-3 border"
-                                            placeholder="+598 99 123 456"
+                                            className="block w-full pl-10 rounded-lg border-ink-300 shadow-sm focus:border-brand-500 focus:ring-brand-500 p-3 border"
+                                            placeholder="+598 91 234 567"
                                             value={formData.phone}
                                             onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
                                         />
                                     </div>
-                                    <p className="mt-1 text-xs text-brand-600">
+                                    <p className="mt-1 text-xs text-ink-600">
                                         Con código de país. Te escribimos por acá.
                                     </p>
                                 </div>
@@ -1078,18 +1137,25 @@ estructurados.
 
 **Files:**
 - Modify: `frontend/index.html`
+- Modify: `frontend/vite.config.ts`
 - Create: `frontend/public/robots.txt`
 - Create: `frontend/public/sitemap.xml`
 
 **Interfaces:**
 - Consumes: los recursos de la Tarea 3 (`favicon-32.png`, `favicon-180.png`, `og-image.jpg`)
-  y los datos de la Tarea 4 (`siteConfig`).
+  y los datos de la Tarea 4 (`siteConfig`). También la configuración de Vitest que la Tarea 5
+  agregó a `vite.config.ts`, que hay que conservar.
 - Produces: nada que consuman otras tareas.
 
-El JSON-LD se escribe literal en el HTML y no se genera desde `siteConfig` en runtime: los
-rastreadores lo leen del HTML servido, y meterlo por JavaScript lo vuelve invisible para
-parte de ellos. **Los valores deben coincidir exactamente con `src/site.ts`.** Si se cambia
-uno, hay que cambiar el otro; el Step 5 lo verifica.
+**El JSON-LD se genera en tiempo de build desde `siteConfig`, no se escribe a mano.** El hook
+`transformIndexHtml` de Vite corre en dev y en build, y su salida queda dentro del HTML
+servido — así que los rastreadores lo leen igual que si estuviera literal, pero el dato del
+negocio vive en un único lugar. Escribirlo dos veces sería duplicación innecesaria; generarlo
+en el navegador con JavaScript lo volvería invisible para parte de los rastreadores. Esta vía
+evita las dos cosas.
+
+Las metaetiquetas (`title`, `description`, Open Graph) **sí** van literales en el HTML: son
+texto de marketing, no datos del negocio, y leerlas en el archivo es una ventaja.
 
 - [ ] **Step 1: Escribir el index.html completo**
 
@@ -1125,44 +1191,7 @@ Reemplazar el contenido de `frontend/index.html` por:
     <meta name="twitter:description" content="Catering artesanal para bodas, eventos corporativos y celebraciones en Montevideo." />
     <meta name="twitter:image" content="https://eyegastronomia.com/og-image.jpg" />
 
-    <script type="application/ld+json">
-    {
-      "@context": "https://schema.org",
-      "@type": "Caterer",
-      "name": "E&E Gastronomía",
-      "url": "https://eyegastronomia.com",
-      "logo": "https://eyegastronomia.com/favicon-180.png",
-      "image": "https://eyegastronomia.com/og-image.jpg",
-      "description": "Catering artesanal para bodas, eventos corporativos y celebraciones en Montevideo.",
-      "email": "eyegastronomia5@hotmail.com",
-      "telephone": "+59891908707",
-      "priceRange": "$$",
-      "sameAs": ["https://www.instagram.com/eye_gastronomia/"],
-      "address": {
-        "@type": "PostalAddress",
-        "streetAddress": "Zum Felde",
-        "addressLocality": "Montevideo",
-        "addressRegion": "Montevideo",
-        "postalCode": "11400",
-        "addressCountry": "UY"
-      },
-      "areaServed": { "@type": "City", "name": "Montevideo" },
-      "openingHoursSpecification": [
-        {
-          "@type": "OpeningHoursSpecification",
-          "dayOfWeek": ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"],
-          "opens": "09:00",
-          "closes": "19:00"
-        },
-        {
-          "@type": "OpeningHoursSpecification",
-          "dayOfWeek": ["Saturday"],
-          "opens": "10:00",
-          "closes": "16:00"
-        }
-      ]
-    }
-    </script>
+    <!-- El JSON-LD lo inyecta el plugin jsonLdPlugin de vite.config.ts desde src/site.ts -->
   </head>
   <body>
     <div id="root"></div>
@@ -1171,7 +1200,88 @@ Reemplazar el contenido de `frontend/index.html` por:
 </html>
 ```
 
-- [ ] **Step 2: Crear robots.txt**
+- [ ] **Step 2: Generar el JSON-LD desde siteConfig**
+
+Reemplazar el contenido de `frontend/vite.config.ts` por lo siguiente. **Conserva el bloque
+`test` que agregó la Tarea 5** — no borrarlo.
+
+```ts
+import { defineConfig, type Plugin } from 'vite'
+import react from '@vitejs/plugin-react'
+import { siteConfig } from './src/site'
+
+const DESCRIPTION =
+  'Catering artesanal para bodas, eventos corporativos y celebraciones en Montevideo.'
+
+/**
+ * Inyecta el JSON-LD de schema.org/Caterer en el <head> en tiempo de build,
+ * derivandolo de siteConfig. Corre en dev y en build, y su salida queda en el
+ * HTML servido, asi que los rastreadores lo leen sin ejecutar JavaScript.
+ *
+ * Esto mantiene los datos del negocio en un unico lugar (src/site.ts).
+ */
+function jsonLdPlugin(): Plugin {
+  return {
+    name: 'inject-json-ld',
+    transformIndexHtml() {
+      const { address } = siteConfig
+
+      const data: Record<string, unknown> = {
+        '@context': 'https://schema.org',
+        '@type': 'Caterer',
+        name: siteConfig.name,
+        url: siteConfig.url,
+        logo: `${siteConfig.url}/favicon-180.png`,
+        image: `${siteConfig.url}/og-image.jpg`,
+        description: DESCRIPTION,
+        email: siteConfig.email,
+        telephone: siteConfig.phoneE164,
+        priceRange: '$$',
+        address: {
+          '@type': 'PostalAddress',
+          // streetAddress se omite si esta vacio: declarar una direccion
+          // incompleta es peor que no declararla.
+          ...(address.street ? { streetAddress: address.street } : {}),
+          addressLocality: address.city,
+          addressRegion: address.region,
+          postalCode: address.postalCode,
+          addressCountry: address.countryCode,
+        },
+        areaServed: { '@type': 'City', name: address.city },
+        openingHoursSpecification: siteConfig.hours.map((h) => ({
+          '@type': 'OpeningHoursSpecification',
+          dayOfWeek: h.schemaDays,
+          opens: h.opens,
+          closes: h.closes,
+        })),
+      }
+
+      const sameAs = [siteConfig.social.instagram, siteConfig.social.facebook].filter(Boolean)
+      if (sameAs.length > 0) data.sameAs = sameAs
+
+      return [
+        {
+          tag: 'script',
+          attrs: { type: 'application/ld+json' },
+          children: JSON.stringify(data, null, 2),
+          injectTo: 'head',
+        },
+      ]
+    },
+  }
+}
+
+export default defineConfig({
+  plugins: [react(), jsonLdPlugin()],
+  test: {
+    globals: true,
+    environment: 'jsdom',
+    setupFiles: './src/test-setup.ts',
+  },
+})
+```
+
+- [ ] **Step 3: Crear robots.txt**
 
 Crear `frontend/public/robots.txt`:
 
@@ -1182,7 +1292,7 @@ Allow: /
 Sitemap: https://eyegastronomia.com/sitemap.xml
 ```
 
-- [ ] **Step 3: Crear sitemap.xml**
+- [ ] **Step 4: Crear sitemap.xml**
 
 Es una sola página, así que el sitemap tiene una sola URL. Actualizar `lastmod` a la fecha
 de publicación.
@@ -1201,47 +1311,70 @@ Crear `frontend/public/sitemap.xml`:
 </urlset>
 ```
 
-- [ ] **Step 4: Verificar que el JSON-LD es JSON válido**
+- [ ] **Step 5: Compilar y verificar que el JSON-LD inyectado es válido**
+
+Este es el paso que confirma que el plugin funciona. El JSON-LD **no** está en
+`index.html` — hay que buscarlo en el HTML compilado.
+
+```bash
+cd frontend && npm run build
+```
+
+Luego:
 
 ```bash
 cd frontend && python -c "
 import json, re, pathlib
-html = pathlib.Path('index.html').read_text(encoding='utf-8')
-block = re.search(r'<script type=\"application/ld\+json\">(.*?)</script>', html, re.S).group(1)
-data = json.loads(block)
-print('OK', data['@type'], '|', data['name'])
+html = pathlib.Path('dist/index.html').read_text(encoding='utf-8')
+m = re.search(r'<script type=\"application/ld\+json\">(.*?)</script>', html, re.S)
+assert m, 'FALLO: el plugin no inyecto ningun bloque JSON-LD'
+data = json.loads(m.group(1))
+print('tipo    ', data['@type'])
+print('nombre  ', data['name'])
+print('email   ', data['email'])
+print('telefono', data['telephone'])
+print('ciudad  ', data['address']['addressLocality'])
+print('horarios', len(data['openingHoursSpecification']), 'bloques')
+print('sameAs  ', data.get('sameAs'))
 "
 ```
 
-Esperado: `OK Caterer | E&E Gastronomía`. Si lanza `JSONDecodeError`, hay una coma suelta o
-una comilla sin cerrar en el bloque.
-
-- [ ] **Step 5: Verificar la coherencia entre el JSON-LD y siteConfig**
-
-```bash
-cd frontend && python -c "
-import json, re, pathlib
-html = pathlib.Path('index.html').read_text(encoding='utf-8')
-ts = pathlib.Path('src/site.ts').read_text(encoding='utf-8')
-data = json.loads(re.search(r'<script type=\"application/ld\+json\">(.*?)</script>', html, re.S).group(1))
-for label, value in [('email', data['email']), ('telefono', data['telephone']), ('ciudad', data['address']['addressLocality'])]:
-    status = 'OK ' if value in ts else 'MISMATCH'
-    print(status, label, value)
-"
+Esperado:
+```
+tipo     Caterer
+nombre   E&E Gastronomía
+email    eyegastronomia5@hotmail.com
+telefono +59891908707
+ciudad   Montevideo
+horarios 2 bloques
+sameAs   ['https://www.instagram.com/eye_gastronomia/']
 ```
 
-Esperado: las tres líneas en `OK`. Un `MISMATCH` significa que el JSON-LD declara un dato
-que la página no muestra — exactamente la inconsistencia que Google penaliza.
+Si el `assert` falla, el plugin no está registrado en el array `plugins` de
+`vite.config.ts`. Si los valores no coinciden con `src/site.ts`, el plugin está leyendo
+constantes propias en lugar de `siteConfig`.
 
-- [ ] **Step 6: Verificar que el build copia los archivos estáticos**
+- [ ] **Step 6: Verificar que el JSON-LD también aparece en dev**
+
+El hook corre en los dos modos, y conviene comprobarlo: si solo funcionara en build, un
+error de datos no se vería hasta publicar.
 
 ```bash
-cd frontend && npm run build && ls dist/robots.txt dist/sitemap.xml dist/og-image.jpg dist/favicon-32.png
+cd frontend && npm run dev &
+sleep 4 && curl -s http://localhost:5173/ | grep -c 'application/ld+json'
+```
+
+Esperado: `1`. Después, detener el servidor de dev.
+
+- [ ] **Step 7: Verificar que el build copia los archivos estáticos**
+
+```bash
+cd frontend && ls dist/robots.txt dist/sitemap.xml dist/og-image.jpg dist/favicon-32.png
 ```
 
 Esperado: los cuatro archivos existen en `dist/`.
 
-- [ ] **Step 7: Verificar que el título llegó al HTML compilado**
+- [ ] **Step 8: Verificar que el título llegó al HTML compilado**
 
 ```bash
 cd frontend && grep -c "E&amp;E Gastronomía" dist/index.html
@@ -1249,14 +1382,27 @@ cd frontend && grep -c "E&amp;E Gastronomía" dist/index.html
 
 Esperado: un número mayor a 0. Si es 0, Vite no procesó el `index.html` correcto.
 
-- [ ] **Step 8: Commit**
+- [ ] **Step 9: Verificar que los tests siguen pasando**
+
+`vite.config.ts` fue reescrito y contiene la configuración de Vitest; hay que confirmar que
+sobrevivió.
 
 ```bash
-git add frontend/index.html frontend/public/robots.txt frontend/public/sitemap.xml
-git commit -m "feat(seo): add metadata, Open Graph and Caterer JSON-LD
+cd frontend && npm test
+```
+
+Esperado: los 6 tests de la Tarea 6 en PASS. Si Vitest no arranca, el bloque `test` se perdió
+al reescribir el archivo.
+
+- [ ] **Step 10: Commit**
+
+```bash
+git add frontend/index.html frontend/vite.config.ts frontend/public/robots.txt frontend/public/sitemap.xml
+git commit -m "feat(seo): add metadata, Open Graph and generated Caterer JSON-LD
 
 El index.html seguia siendo el del scaffold: titulo 'frontend', lang en,
-favicon de Vite y ninguna descripcion."
+favicon de Vite y ninguna descripcion. El JSON-LD se genera en build desde
+siteConfig con un plugin de Vite, asi los datos del negocio no se duplican."
 ```
 
 ---
@@ -1482,10 +1628,10 @@ npm run dev             # http://localhost:5173
 
 ## Datos del negocio
 
-Nombre, teléfono, email, dirección y horarios viven **solo** en `frontend/src/site.ts`, que
-consumen las secciones de Contacto y el Footer. El JSON-LD de `frontend/index.html` los
-duplica por necesidad (los rastreadores lo leen del HTML servido) y debe mantenerse
-sincronizado a mano.
+Nombre, teléfono, email, dirección y horarios viven **solo** en `frontend/src/site.ts`. Lo
+consumen las secciones de Contacto y el Footer, y el JSON-LD de `schema.org/Caterer` se genera
+desde ahí en tiempo de build, mediante el plugin `jsonLdPlugin` de `vite.config.ts`. Para
+cambiar un dato del negocio se edita un solo archivo.
 ```
 
 - [ ] **Step 3: Verificar que el README no menciona la marca vieja**
@@ -1512,7 +1658,7 @@ Después de la Tarea 9, con todo integrado:
 - [ ] `cd frontend && npm test` — los 6 tests en PASS
 - [ ] `cd frontend && npm run build` — build exitoso
 - [ ] `cd frontend && npm run lint` — sin errores
-- [ ] `grep -rn "accent-\|gray-900\|MyCatering\|mycathering\|localhost:8080" frontend/src frontend/index.html README.md` — sin resultados
+- [ ] `grep -rn "accent-\|gray-\|MyCatering\|mycathering\|localhost:8080" frontend/src frontend/index.html README.md` — sin resultados
 - [ ] Revisión visual en `npm run dev`: Navbar y botones vinosos, logo circular sin recuadro,
       acentos verdes, fondo crema, títulos en Playfair y cuerpo en Inter, sin reanimación al
       hacer scroll
@@ -1528,18 +1674,19 @@ sueltos, ninguno bloqueante:
 
 - **Falta el número de puerta de Zum Felde.** El JSON-LD declara la calle sin altura. Si el
   negocio no atiende público en un local, eso está bien y se deja así. Si atiende, agregar la
-  altura mejora la ficha local de Google; va en `siteConfig.address.street` y en
-  `streetAddress` del JSON-LD.
-- **Facebook queda vacío**, así que el icono no se renderiza. Si existe la página, agregar la
-  URL a `siteConfig.social.facebook` y sumarla al array `sameAs` del JSON-LD.
+  altura mejora la ficha local de Google; va en `siteConfig.address.street`.
+- **Facebook queda vacío**, así que el icono no se renderiza y la URL no entra al `sameAs`.
+  Si existe la página, agregar la URL a `siteConfig.social.facebook` — el plugin la suma al
+  `sameAs` automáticamente.
 
 Aparte, una observación que no afecta al plan: el email es de Hotmail, no del dominio. Funciona
 y el JSON-LD lo acepta, pero una vez comprado `eyegastronomia.com` conviene mover el contacto
 público a una dirección del dominio — pesa en la percepción de un negocio que cobra por
 eventos. Es un cambio de una línea en `site.ts` cuando quieras hacerlo.
 
-Cualquier cambio de estos datos hay que aplicarlo en **los dos lugares** (`site.ts` y el
-JSON-LD de `index.html`); el Step 5 de la Tarea 7 lo verifica.
+Cualquier cambio de estos datos se hace **solo en `src/site.ts`**: las secciones de Contacto y
+el Footer lo consumen en runtime, y el JSON-LD se regenera en el build. No hay un segundo lugar
+que actualizar.
 
 ## Fuera de alcance de este plan
 
