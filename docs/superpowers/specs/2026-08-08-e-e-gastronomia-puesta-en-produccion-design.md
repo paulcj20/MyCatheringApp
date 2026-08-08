@@ -122,11 +122,11 @@ por WhatsApp, Instagram o teléfono, y esas las carga el equipo a mano.
 PUERTA 1 — Formulario público (landing, eyegastronomia.com)
     │  POST /api/bookings   (CORS: solo eyegastronomia.com)
     ▼
-Ruta API pública en wacrm (admin.eyegastronomia.com)
+Ruta API pública en wacrm (admin.eyegastronomia.com), solo servidor
     │  valida, limita por IP, descarta honeypot
     │  account_id sale de variable de entorno, nunca del body
     ▼
-RPC SECURITY DEFINER  ──►  INSERT en bookings (source='web')
+supabaseAdmin (service role)  ──►  INSERT en bookings (source='web')
 
 PUERTA 2 — Alta manual desde el calendario (equipo autenticado)
     │  busca un contacto existente o carga uno nuevo por teléfono
@@ -251,11 +251,16 @@ Es la **única superficie expuesta a internet sin autenticación**, así que con
 defensas: validación de esquema en el servidor, límite de tasa por IP, descarte por
 honeypot, y longitudes máximas en todos los campos de texto.
 
-**No usa la service role key.** El spike encontró un precedente mejor dentro del propio
-wacrm: la ruta pública `/api/invitations/[token]/peek` resuelve el mismo problema llamando a
-un RPC `SECURITY DEFINER` en lugar de exponer una clave con permisos totales. El endpoint de
-reservas sigue ese patrón — la clave anónima queda habilitada para una sola operación de
-contrato fijo, y la service role nunca aparece en una superficie pública.
+**Usa la service role key, en una ruta que corre solo en el servidor.** wacrm ya tiene ese
+patrón: `supabaseAdmin` en `@/lib/flows/admin-client`. La clave nunca llega al navegador.
+
+Se evaluó y se descartó copiar la ruta pública `/api/invitations/[token]/peek`, que resuelve
+su caso con un RPC `SECURITY DEFINER` y sin clave privilegiada. La analogía no se sostiene:
+en `peek` **el token es la autorización** — un secreto inadivinable que viaja en la URL.
+El endpoint de reservas no tiene un secreto equivalente, así que el RPC tendría que recibir
+el `account_id` como parámetro; y como toda app Next.js expone su
+`NEXT_PUBLIC_SUPABASE_ANON_KEY` en el navegador, cualquiera podría invocarlo con la cuenta
+que quisiera.
 
 **El `account_id` sale de una variable de entorno del servidor, nunca del cuerpo del
 pedido.** Si viniera en el JSON, cualquiera podría escribir reservas en la cuenta de otro.
