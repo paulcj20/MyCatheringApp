@@ -4,7 +4,7 @@ import { siteConfig } from '../site';
 
 const Contact = () => {
     return (
-        <section id="contact" className="py-16 md:py-24 bg-surface relative overflow-hidden">
+        <section id="contact" className="py-20 md:py-28 bg-surface relative overflow-hidden">
             {/* Decorative bg elements (same as Agenda but inverted colors for white bg compatibility) */}
             <div className="absolute top-0 left-0 -ml-20 -mt-20 w-96 h-96 bg-primary-100 rounded-full mix-blend-multiply filter blur-3xl opacity-40 z-0"></div>
             <div className="absolute bottom-0 right-0 -mr-20 -mb-20 w-96 h-96 bg-primary-100 rounded-full mix-blend-multiply filter blur-3xl opacity-40 z-0"></div>
@@ -13,7 +13,7 @@ const Contact = () => {
                 <motion.div
                     initial={{ opacity: 0, y: 20 }}
                     whileInView={{ opacity: 1, y: 0 }}
-                    viewport={{ once: false, amount: 0.25 }}
+                    viewport={{ once: true, amount: 0.25 }}
                     className="text-center mb-16"
                 >
                     <h2 className="text-sm md:text-base text-brand-600 font-semibold tracking-wide uppercase">Contacto</h2>
@@ -31,7 +31,7 @@ const Contact = () => {
                     <motion.div
                         initial={{ opacity: 0, x: -50 }}
                         whileInView={{ opacity: 1, x: 0 }}
-                        viewport={{ once: false, amount: 0.25 }}
+                        viewport={{ once: true, amount: 0.25 }}
                         transition={{ delay: 0.2 }}
                         className="lg:col-span-3 bg-surface p-8 md:p-10 rounded-2xl border border-ink-200 shadow-2xl"
                     >
@@ -97,7 +97,7 @@ const Contact = () => {
                     <motion.div
                         initial={{ opacity: 0, x: 50 }}
                         whileInView={{ opacity: 1, x: 0 }}
-                        viewport={{ once: false, amount: 0.25 }}
+                        viewport={{ once: true, amount: 0.25 }}
                         transition={{ delay: 0.2 }}
                         className="lg:col-span-2 space-y-10"
                     >

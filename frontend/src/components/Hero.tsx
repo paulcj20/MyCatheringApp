@@ -24,7 +24,7 @@ const Hero = () => {
                 <motion.h1
                     initial={{ opacity: 0, y: 30 }}
                     whileInView={{ opacity: 1, y: 0 }}
-                    viewport={{ once: false }}
+                    viewport={{ once: true }}
                     transition={{ duration: 1, ease: "easeOut" }}
                     className="text-5xl md:text-7xl lg:text-8xl font-bold text-white font-serif mb-8 drop-shadow-[0_4px_4px_rgba(0,0,0,0.5)] tracking-tight leading-tight"
                 >
@@ -35,7 +35,7 @@ const Hero = () => {
                 <motion.p
                     initial={{ opacity: 0, y: 30 }}
                     whileInView={{ opacity: 1, y: 0 }}
-                    viewport={{ once: false }}
+                    viewport={{ once: true }}
                     transition={{ duration: 1, delay: 0.3, ease: "easeOut" }}
                     className="mt-6 text-xl md:text-2xl text-white max-w-3xl mx-auto font-serif italic font-light drop-shadow-md px-4 tracking-wide leading-relaxed"
                 >
@@ -45,7 +45,7 @@ const Hero = () => {
                 <motion.div
                     initial={{ opacity: 0, y: 30 }}
                     whileInView={{ opacity: 1, y: 0 }}
-                    viewport={{ once: false }}
+                    viewport={{ once: true }}
                     transition={{ duration: 1, delay: 0.6, ease: "easeOut" }}
                     className="mt-16 flex flex-col sm:flex-row justify-center gap-8 px-4 items-center"
                 >

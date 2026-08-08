@@ -10,7 +10,7 @@ const services = [
     {
         title: 'Eventos Corporativos',
         description: 'Impresione a sus clientes y socios con catering profesional de alto nivel.',
-        icon: 'tophat',
+        icon: '🎩',
         image: 'https://images.unsplash.com/photo-1511795409834-ef04bbd61622?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80',
     },
     {
@@ -32,12 +32,12 @@ const services = [
 
 const Services = () => {
     return (
-        <section id="services" className="py-12 md:py-24 bg-surface">
+        <section id="services" className="py-20 md:py-28 bg-surface">
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <motion.div
                     initial={{ opacity: 0, y: 20 }}
                     whileInView={{ opacity: 1, y: 0 }}
-                    viewport={{ once: false, amount: 0.25 }}
+                    viewport={{ once: true, amount: 0.25 }}
                     transition={{ duration: 0.6 }}
                     className="text-center"
                 >
@@ -50,7 +50,10 @@ const Services = () => {
                     </p>
                 </motion.div>
 
-                <div className="mt-12 md:mt-20 mb-12 relative w-full overflow-hidden mask-gradient-x pb-8">
+                <div
+                    className="mt-12 md:mt-20 mb-12 relative w-full overflow-hidden pb-8"
+                    style={{ maskImage: 'linear-gradient(to right, transparent, black 8%, black 92%, transparent)', WebkitMaskImage: 'linear-gradient(to right, transparent, black 8%, black 92%, transparent)' }}
+                >
                     <div className="flex w-max hover:pause animate-scroll gap-8">
                         {/* First set of items */}
                         {[...services, ...services].map((service, index) => (
@@ -62,7 +65,7 @@ const Services = () => {
                                     <img src={service.image} alt={service.title} className="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-500" />
                                 </div>
                                 <div className="p-6 md:p-8">
-                                    <div className="text-4xl mb-4">{service.icon === 'tophat' ? '🎩' : service.icon}</div>
+                                    <div className="text-4xl mb-4">{service.icon}</div>
                                     <h3 className="text-xl font-bold text-brand-950 font-serif mb-2">{service.title}</h3>
                                     <p className="text-ink-500">{service.description}</p>
                                 </div>

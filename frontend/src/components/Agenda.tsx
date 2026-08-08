@@ -42,7 +42,7 @@ const Agenda = () => {
     };
 
     return (
-        <section id="agenda" className="py-16 md:py-24 bg-surface relative overflow-hidden">
+        <section id="agenda" className="py-20 md:py-28 bg-surface relative overflow-hidden">
             {/* Decorative bg element */}
             <div className="absolute top-0 right-0 -mr-20 -mt-20 w-96 h-96 bg-primary-100 rounded-full mix-blend-multiply filter blur-3xl opacity-50 z-0"></div>
             <div className="absolute bottom-0 left-0 -ml-20 -mb-20 w-96 h-96 bg-primary-200 rounded-full mix-blend-multiply filter blur-3xl opacity-50 z-0"></div>
@@ -51,7 +51,7 @@ const Agenda = () => {
                 <motion.div
                     initial={{ opacity: 0, y: 20 }}
                     whileInView={{ opacity: 1, y: 0 }}
-                    viewport={{ once: false, amount: 0.25 }}
+                    viewport={{ once: true, amount: 0.25 }}
                     className="text-center mb-16"
                 >
                     <h2 className="text-sm md:text-base text-brand-600 font-semibold tracking-wide uppercase">Reservas</h2>
@@ -68,7 +68,7 @@ const Agenda = () => {
                     <motion.div
                         initial={{ opacity: 0, x: -50 }}
                         whileInView={{ opacity: 1, x: 0 }}
-                        viewport={{ once: false, amount: 0.25 }}
+                        viewport={{ once: true, amount: 0.25 }}
                         className="lg:col-span-2 mb-12 lg:mb-0"
                     >
                         <h3 className="text-2xl font-bold text-brand-950 font-serif mb-6">¿Por qué elegirnos?</h3>
@@ -107,7 +107,7 @@ const Agenda = () => {
                     <motion.div
                         initial={{ opacity: 0, x: 50 }}
                         whileInView={{ opacity: 1, x: 0 }}
-                        viewport={{ once: false, amount: 0.25 }}
+                        viewport={{ once: true, amount: 0.25 }}
                         className="lg:col-span-3 bg-surface rounded-2xl shadow-2xl p-6 md:p-10 border border-ink-200"
                     >
                         <form onSubmit={handleSubmit} className="space-y-6">
