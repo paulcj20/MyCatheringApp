@@ -1,5 +1,6 @@
 import { motion } from 'framer-motion';
 import { FaPhoneAlt, FaEnvelope, FaMapMarkerAlt, FaUser, FaCommentDots, FaClock, FaInstagram, FaFacebookF, FaWhatsapp } from 'react-icons/fa';
+import { siteConfig } from '../site';
 
 const Contact = () => {
     return (
@@ -112,7 +113,7 @@ const Contact = () => {
                                     </span>
                                     <div className="ml-4">
                                         <h4 className="text-lg font-medium text-brand-950">Teléfono</h4>
-                                        <p className="mt-1 text-ink-500">+54 9 11 1234 5678</p>
+                                        <p className="mt-1 text-ink-500">{siteConfig.phoneDisplay}</p>
                                     </div>
                                 </li>
                                 <li className="flex items-start">
@@ -121,7 +122,7 @@ const Contact = () => {
                                     </span>
                                     <div className="ml-4">
                                         <h4 className="text-lg font-medium text-brand-950">Email</h4>
-                                        <p className="mt-1 text-ink-500">contacto@mycathering.com</p>
+                                        <p className="mt-1 text-ink-500">{siteConfig.email}</p>
                                     </div>
                                 </li>
                                 <li className="flex items-start">
@@ -130,7 +131,7 @@ const Contact = () => {
                                     </span>
                                     <div className="ml-4">
                                         <h4 className="text-lg font-medium text-brand-950">Ubicación</h4>
-                                        <p className="mt-1 text-ink-500">Montevideo, Uruguay</p>
+                                        <p className="mt-1 text-ink-500">{`${siteConfig.address.city}, ${siteConfig.address.country}`}</p>
                                     </div>
                                 </li>
                             </ul>
@@ -139,13 +140,17 @@ const Contact = () => {
                             <div className="mt-8 pt-6 border-t border-ink-200">
                                 <h4 className="text-lg font-medium text-brand-950 mb-4 font-serif">Síguenos</h4>
                                 <div className="flex space-x-4">
-                                    <a href="#" className="w-10 h-10 rounded-full bg-primary-50 flex items-center justify-center text-primary-600 hover:bg-brand-700 hover:text-white transition-all duration-300 shadow-sm hover:shadow-lg hover:-translate-y-1">
-                                        <FaInstagram size={20} />
-                                    </a>
-                                    <a href="#" className="w-10 h-10 rounded-full bg-primary-50 flex items-center justify-center text-primary-600 hover:bg-brand-700 hover:text-white transition-all duration-300 shadow-sm hover:shadow-lg hover:-translate-y-1">
-                                        <FaFacebookF size={20} />
-                                    </a>
-                                    <a href="#" className="w-10 h-10 rounded-full bg-primary-50 flex items-center justify-center text-primary-600 hover:bg-brand-700 hover:text-white transition-all duration-300 shadow-sm hover:shadow-lg hover:-translate-y-1">
+                                    {siteConfig.social.instagram && (
+                                        <a href={siteConfig.social.instagram} className="w-10 h-10 rounded-full bg-primary-50 flex items-center justify-center text-primary-600 hover:bg-brand-700 hover:text-white transition-all duration-300 shadow-sm hover:shadow-lg hover:-translate-y-1">
+                                            <FaInstagram size={20} />
+                                        </a>
+                                    )}
+                                    {siteConfig.social.facebook && (
+                                        <a href={siteConfig.social.facebook} className="w-10 h-10 rounded-full bg-primary-50 flex items-center justify-center text-primary-600 hover:bg-brand-700 hover:text-white transition-all duration-300 shadow-sm hover:shadow-lg hover:-translate-y-1">
+                                            <FaFacebookF size={20} />
+                                        </a>
+                                    )}
+                                    <a href={`https://wa.me/${siteConfig.whatsappNumber}`} className="w-10 h-10 rounded-full bg-primary-50 flex items-center justify-center text-primary-600 hover:bg-brand-700 hover:text-white transition-all duration-300 shadow-sm hover:shadow-lg hover:-translate-y-1">
                                         <FaWhatsapp size={20} />
                                     </a>
                                 </div>
@@ -158,14 +163,12 @@ const Contact = () => {
                                 <FaClock className="text-primary-600" size={24} /> Horarios de Atención
                             </h3>
                             <ul className="space-y-4 pl-2">
-                                <li className="flex justify-between items-center text-lg border-b border-dashed border-ink-200 pb-2">
-                                    <span className="text-ink-600 font-medium">Lunes a Viernes</span>
-                                    <span className="text-brand-950 font-bold">9:00 - 19:00</span>
-                                </li>
-                                <li className="flex justify-between items-center text-lg border-b border-dashed border-ink-200 pb-2">
-                                    <span className="text-ink-600 font-medium">Sábados</span>
-                                    <span className="text-brand-950 font-bold">10:00 - 16:00</span>
-                                </li>
+                                {siteConfig.hours.map((h) => (
+                                    <li key={h.days} className="flex justify-between items-center text-lg border-b border-dashed border-ink-200 pb-2">
+                                        <span className="text-ink-700 font-medium">{h.days}</span>
+                                        <span className="text-brand-950 font-bold">{h.opens} - {h.closes}</span>
+                                    </li>
+                                ))}
                             </ul>
                         </div>
                     </motion.div>
