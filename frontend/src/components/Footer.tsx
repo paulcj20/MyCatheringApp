@@ -1,4 +1,4 @@
-import { FaInstagram, FaFacebookF, FaWhatsapp, FaMapMarkerAlt, FaPhoneAlt, FaEnvelope } from 'react-icons/fa';
+import { FaInstagram, FaFacebookF, FaTiktok, FaWhatsapp, FaMapMarkerAlt, FaPhoneAlt, FaEnvelope } from 'react-icons/fa';
 import logo from '../assets/images/logo-circular.png';
 import { siteConfig } from '../site';
 
@@ -27,6 +27,11 @@ const Footer = () => {
                             {siteConfig.social.facebook && (
                                 <a href={siteConfig.social.facebook} className="w-10 h-10 rounded-full bg-brand-700 flex items-center justify-center text-white hover:bg-brand-600 hover:text-white transition-all duration-300 shadow-md hover:shadow-lg hover:-translate-y-1">
                                     <FaFacebookF size={18} />
+                                </a>
+                            )}
+                            {siteConfig.social.tiktok && (
+                                <a href={siteConfig.social.tiktok} className="w-10 h-10 rounded-full bg-brand-700 flex items-center justify-center text-white hover:bg-brand-600 hover:text-white transition-all duration-300 shadow-md hover:shadow-lg hover:-translate-y-1">
+                                    <FaTiktok size={18} />
                                 </a>
                             )}
                             <a href={`https://wa.me/${siteConfig.whatsappNumber}`} className="w-10 h-10 rounded-full bg-brand-700 flex items-center justify-center text-white hover:bg-brand-600 hover:text-white transition-all duration-300 shadow-md hover:shadow-lg hover:-translate-y-1">

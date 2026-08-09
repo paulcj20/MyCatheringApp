@@ -1,4 +1,5 @@
 import { motion } from 'framer-motion';
+import servicioPasteleria from '../assets/images/servicio-pasteleria.jpg';
 
 const services = [
     {
@@ -24,6 +25,19 @@ const services = [
         description: 'Celebre con estilo en la comodidad de su hogar o venue favorito.',
         icon: '🎉',
         image: 'https://images.unsplash.com/photo-1519167758481-83f550bb49b3?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80',
+    },
+    {
+        title: 'Lunch',
+        description: 'Enviamos lunch con distintas promociones para quienes buscan una opción práctica, sin necesidad de contratar el servicio completo de catering.',
+        icon: '🥪',
+        // TODO: reemplazar por una foto propia, como se hizo con el poster del hero.
+        image: 'https://images.unsplash.com/photo-1600335895229-6e75511892c8?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80',
+    },
+    {
+        title: 'Pastelería',
+        description: 'Tortas y postres a medida, hechos por encargue para endulzar cualquier celebración.',
+        icon: '🍰',
+        image: servicioPasteleria,
     },
 ];
 

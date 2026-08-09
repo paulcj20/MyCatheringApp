@@ -1,6 +1,11 @@
 import { motion } from 'framer-motion';
+import { FaWhatsapp } from 'react-icons/fa';
 import heroVideo from '../assets/videos/hero.mp4';
 import heroPoster from '../assets/images/hero-poster.jpg';
+import { siteConfig } from '../site';
+
+const WHATSAPP_MESSAGE = 'Hola! Me gustaria consultar por el catering para un evento.';
+const whatsappHref = `https://wa.me/${siteConfig.whatsappNumber}?text=${encodeURIComponent(WHATSAPP_MESSAGE)}`;
 
 const Hero = () => {
     return (
@@ -49,23 +54,43 @@ const Hero = () => {
                     whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true }}
                     transition={{ duration: 1, delay: 0.6, ease: "easeOut" }}
-                    className="mt-16 flex flex-col sm:flex-row justify-center gap-8 px-4 items-center"
+                    className="mt-16 flex flex-col sm:flex-row justify-center gap-6 px-4 items-center"
                 >
                     {/* Primary Button: Vinoso Solid */}
                     <a
                         href="#agenda"
-                        className="group relative px-10 py-5 bg-brand-700 text-white text-lg font-bold rounded-none uppercase tracking-[0.2em] overflow-hidden transition-all duration-300 hover:bg-brand-800 hover:shadow-[0_0_40px_rgba(105,19,22,0.6)] transform hover:-translate-y-1"
+                        className="group relative px-10 py-5 bg-brand-700 text-white text-lg font-bold rounded-xl uppercase tracking-[0.15em] overflow-hidden transition-all duration-300 hover:bg-brand-800 hover:shadow-[0_0_40px_rgba(105,19,22,0.6)] transform hover:-translate-y-1"
                     >
                         <span className="relative z-10 drop-shadow-md">Reservar Fecha</span>
                         <div className="absolute top-0 -inset-full h-full w-1/2 z-5 block transform -skew-x-12 bg-gradient-to-r from-transparent to-white opacity-20 group-hover:animate-shine" />
                     </a>
 
-                    {/* Secondary Button: Premium Frosted Glass */}
+                    {/* Secondary Button: same family as the primary, one tone lighter, no blur */}
                     <a
                         href="#services"
-                        className="group px-10 py-5 bg-white/10 backdrop-blur-md border border-white/40 text-white text-lg font-medium rounded-none uppercase tracking-[0.2em] hover:bg-white/20 transition-all duration-300 hover:border-white/80 hover:shadow-[0_0_30px_rgba(255,255,255,0.2)]"
+                        className="px-10 py-5 bg-white/95 text-brand-800 text-lg font-bold rounded-xl uppercase tracking-[0.15em] border-2 border-white transition-all duration-300 hover:bg-white hover:shadow-[0_0_30px_rgba(255,255,255,0.35)] transform hover:-translate-y-1"
                     >
-                        Ver Menú
+                        Nuestros Servicios
+                    </a>
+                </motion.div>
+
+                <motion.div
+                    initial={{ opacity: 0, y: 20 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ duration: 1, delay: 0.9, ease: "easeOut" }}
+                    className="mt-8 flex justify-center px-4"
+                >
+                    {/* Tertiary affordance: quick WhatsApp enquiry, deliberately lighter
+                        than the two CTAs above so it doesn't compete with "Reservar Fecha". */}
+                    <a
+                        href={whatsappHref}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="inline-flex items-center gap-2 text-white/90 text-base font-medium underline decoration-white/40 underline-offset-4 transition-colors duration-300 hover:text-white hover:decoration-white"
+                    >
+                        <FaWhatsapp size={20} />
+                        Consultanos por WhatsApp
                     </a>
                 </motion.div>
             </div>

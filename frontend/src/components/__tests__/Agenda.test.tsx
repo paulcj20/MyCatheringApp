@@ -9,7 +9,7 @@ const mockedPost = vi.mocked(axios.post);
 const fill = async (user: ReturnType<typeof userEvent.setup>) => {
     await user.type(screen.getByLabelText(/nombre completo/i), 'Ana López');
     await user.type(screen.getByLabelText(/^email$/i), 'ana@ejemplo.com');
-    await user.type(screen.getByLabelText(/whatsapp/i), '+59899123456');
+    await user.type(screen.getByLabelText(/whatsapp/i), '091908707');
 };
 
 beforeEach(() => {
@@ -22,7 +22,7 @@ it('pide el telefono como campo obligatorio', () => {
     expect(phone).toBeRequired();
 });
 
-it('envia el telefono en el payload', async () => {
+it('envia el telefono en formato internacional, sin el 0 inicial', async () => {
     const user = userEvent.setup();
     mockedPost.mockResolvedValue({ data: {} });
     render(<Agenda />);
@@ -31,7 +31,20 @@ it('envia el telefono en el payload', async () => {
 
     await waitFor(() => expect(mockedPost).toHaveBeenCalled());
     const payload = mockedPost.mock.calls[0][1] as Record<string, unknown>;
-    expect(payload.phone).toBe('+59899123456');
+    expect(payload.phone).toBe('59891908707');
+});
+
+it('no envia el formulario si el telefono no tiene 9 digitos', async () => {
+    const user = userEvent.setup();
+    mockedPost.mockResolvedValue({ data: {} });
+    render(<Agenda />);
+    await user.type(screen.getByLabelText(/nombre completo/i), 'Ana López');
+    await user.type(screen.getByLabelText(/^email$/i), 'ana@ejemplo.com');
+    await user.type(screen.getByLabelText(/whatsapp/i), '9190870'); // 7 digitos
+    await user.click(screen.getByRole('button', { name: /solicitar/i }));
+
+    expect(screen.getByText(/9 dígitos/i)).toBeInTheDocument();
+    expect(mockedPost).not.toHaveBeenCalled();
 });
 
 it('envia la fecha como YYYY-MM-DD y la hora como HH:MM:00', async () => {

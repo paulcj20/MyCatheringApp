@@ -14,7 +14,7 @@ export const siteConfig = {
     domain: 'eyegastronomia.com',
     url: 'https://eyegastronomia.com',
 
-    email: 'eyegastronomia5@hotmail.com',
+    email: 'contact@eyegastronomia.com',
     phoneDisplay: '091 908 707',
     phoneE164: '+59891908707',      // Uruguay: cae el 0 inicial del 091
     whatsappNumber: '59891908707',  // sin + ni espacios, para wa.me
@@ -37,6 +37,7 @@ export const siteConfig = {
 
     social: {
         instagram: 'https://www.instagram.com/eye_gastronomia/',
-        facebook: '', // vacio oculta el icono
+        facebook: 'https://www.facebook.com/elisayexequiel',
+        tiktok: 'https://www.tiktok.com/@eyegastronomia',
     },
 } as const;

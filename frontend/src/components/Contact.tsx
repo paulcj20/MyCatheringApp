@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion';
-import { FaPhoneAlt, FaEnvelope, FaMapMarkerAlt, FaUser, FaCommentDots, FaClock, FaInstagram, FaFacebookF, FaWhatsapp } from 'react-icons/fa';
+import { FaPhoneAlt, FaEnvelope, FaMapMarkerAlt, FaUser, FaCommentDots, FaClock, FaInstagram, FaFacebookF, FaTiktok, FaWhatsapp } from 'react-icons/fa';
 import { siteConfig } from '../site';
 
 const Contact = () => {
@@ -148,6 +148,11 @@ const Contact = () => {
                                     {siteConfig.social.facebook && (
                                         <a href={siteConfig.social.facebook} className="w-10 h-10 rounded-full bg-primary-50 flex items-center justify-center text-primary-600 hover:bg-brand-700 hover:text-white transition-all duration-300 shadow-sm hover:shadow-lg hover:-translate-y-1">
                                             <FaFacebookF size={20} />
+                                        </a>
+                                    )}
+                                    {siteConfig.social.tiktok && (
+                                        <a href={siteConfig.social.tiktok} className="w-10 h-10 rounded-full bg-primary-50 flex items-center justify-center text-primary-600 hover:bg-brand-700 hover:text-white transition-all duration-300 shadow-sm hover:shadow-lg hover:-translate-y-1">
+                                            <FaTiktok size={20} />
                                         </a>
                                     )}
                                     <a href={`https://wa.me/${siteConfig.whatsappNumber}`} className="w-10 h-10 rounded-full bg-primary-50 flex items-center justify-center text-primary-600 hover:bg-brand-700 hover:text-white transition-all duration-300 shadow-sm hover:shadow-lg hover:-translate-y-1">

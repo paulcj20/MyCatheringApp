@@ -52,7 +52,11 @@ function jsonLdPlugin(): Plugin {
         })),
       }
 
-      const sameAs = [siteConfig.social.instagram, siteConfig.social.facebook].filter(Boolean)
+      const sameAs = [
+        siteConfig.social.instagram,
+        siteConfig.social.facebook,
+        siteConfig.social.tiktok,
+      ].filter(Boolean)
       if (sameAs.length > 0) data.sameAs = sameAs
 
       return [

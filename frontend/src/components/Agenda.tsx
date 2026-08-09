@@ -8,7 +8,8 @@ const DatePicker = lazy(() => import('react-datepicker'));
 import axios from 'axios';
 import { motion } from 'framer-motion';
 import { toIsoDate } from '../date';
-import { FaUser, FaEnvelope, FaCalendarAlt, FaClock, FaUsers, FaGlassCheers, FaCommentDots, FaWhatsapp } from 'react-icons/fa';
+import { toInternationalPhone } from '../phone';
+import { FaUser, FaEnvelope, FaCalendarAlt, FaClock, FaUsers, FaGlassCheers, FaCommentDots, FaWhatsapp, FaCheckCircle } from 'react-icons/fa';
 
 const Agenda = () => {
     const initialForm = {
@@ -24,9 +25,17 @@ const Agenda = () => {
     };
     const [formData, setFormData] = useState(initialForm);
     const [status, setStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle');
+    const [phoneError, setPhoneError] = useState('');
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
+
+        const internationalPhone = toInternationalPhone(formData.phone);
+        if (!internationalPhone) {
+            setPhoneError('Revisá el número: son 9 dígitos, como 091 908 707.');
+            return;
+        }
+        setPhoneError('');
         setStatus('loading');
         try {
             const timeParts = formData.eventTime.split(':');
@@ -35,6 +44,7 @@ const Agenda = () => {
             const apiBase = import.meta.env.VITE_API_BASE_URL ?? '';
             await axios.post(`${apiBase}/api/bookings`, {
                 ...formData,
+                phone: internationalPhone,
                 eventDate: toIsoDate(formData.eventDate),
                 eventTime: formattedTime
             });
@@ -159,18 +169,27 @@ const Agenda = () => {
                                         <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                                             <FaWhatsapp className="text-ink-400" />
                                         </div>
+                                        <div className="absolute inset-y-0 left-9 flex items-center pointer-events-none text-ink-500 font-medium">
+                                            +598
+                                        </div>
                                         <input
                                             type="tel"
                                             id="phone"
+                                            inputMode="numeric"
                                             required
-                                            className="block w-full pl-10 rounded-lg border-ink-300 shadow-sm focus:border-brand-500 focus:ring-brand-500 p-3 border"
-                                            placeholder="+598 91 234 567"
+                                            aria-invalid={phoneError !== ''}
+                                            aria-describedby="phone-help"
+                                            className="block w-full pl-24 rounded-lg border-ink-300 shadow-sm focus:border-brand-500 focus:ring-brand-500 p-3 border"
+                                            placeholder="091 908 707"
                                             value={formData.phone}
-                                            onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
+                                            onChange={(e) => {
+                                                setFormData({ ...formData, phone: e.target.value });
+                                                if (phoneError) setPhoneError('');
+                                            }}
                                         />
                                     </div>
-                                    <p className="mt-1 text-xs text-ink-600">
-                                        Con código de país. Te escribimos por acá.
+                                    <p id="phone-help" className={`mt-1 text-xs ${phoneError ? 'text-danger-600' : 'text-ink-600'}`}>
+                                        {phoneError || 'Con el 0 adelante, como lo escribís siempre: 091 908 707.'}
                                     </p>
                                 </div>
                             </div>
@@ -265,6 +284,10 @@ const Agenda = () => {
                                         onChange={(e) => setFormData({ ...formData, message: e.target.value })}
                                     ></textarea>
                                 </div>
+                                <p className="mt-1 text-xs text-ink-600">
+                                    Contanos un poco qué tipo de evento tenés en mente y qué comida te gustaría ofrecer:
+                                    con eso alcanza para arrancar. Nuestro equipo te escribe a la brevedad para afinar los detalles.
+                                </p>
                             </div>
 
                             <div className="absolute left-[-9999px]" aria-hidden="true">
@@ -290,11 +313,14 @@ const Agenda = () => {
                             </div>
 
                             {status === 'success' && (
-                                <div role="status" className="rounded-lg bg-primary-50 p-4 border border-primary-200">
-                                    <h3 className="text-sm font-medium text-primary-800">¡Solicitud Recibida!</h3>
-                                    <p className="mt-2 text-sm text-primary-700">
-                                        Nuestro equipo coordinará los detalles y te contactará a la brevedad.
-                                    </p>
+                                <div role="status" className="rounded-2xl bg-primary-50 p-6 border-2 border-primary-200 shadow-lg flex items-start gap-4">
+                                    <FaCheckCircle className="flex-shrink-0 text-primary-600 mt-1" size={32} aria-hidden="true" />
+                                    <div>
+                                        <h3 className="text-xl font-bold text-primary-800 font-serif">¡Solicitud recibida!</h3>
+                                        <p className="mt-2 text-base text-primary-700">
+                                            Nuestro equipo va a coordinar los detalles y te va a contactar a la brevedad, ¡gracias por escribirnos!
+                                        </p>
+                                    </div>
                                 </div>
                             )}
 
