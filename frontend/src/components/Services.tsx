@@ -1,37 +1,41 @@
 import { motion } from 'framer-motion';
+import servicioBodas from '../assets/images/servicio-bodas.jpg';
+import servicioCorporativo from '../assets/images/servicio-corporativo.jpg';
+import servicioCumpleanos from '../assets/images/servicio-cumpleanos.jpg';
+import servicioLunch from '../assets/images/servicio-lunch.jpg';
 import servicioPasteleria from '../assets/images/servicio-pasteleria.jpg';
+import servicioPrivadas from '../assets/images/servicio-privadas.jpg';
 
 const services = [
     {
         title: 'Bodas',
         description: 'Menús personalizados que cuentan su historia de amor a través de sabores exquisitos.',
         icon: '💍',
-        image: 'https://images.unsplash.com/photo-1519741497674-611481863552?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80',
+        image: servicioBodas,
     },
     {
         title: 'Eventos Corporativos',
         description: 'Impresione a sus clientes y socios con catering profesional de alto nivel.',
         icon: '🎩',
-        image: 'https://images.unsplash.com/photo-1511795409834-ef04bbd61622?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80',
+        image: servicioCorporativo,
     },
     {
         title: 'Cumpleaños & Social',
         description: 'Celebraciones vibrantes y emotivas, donde cada detalle refleja su alegría.',
         icon: '🎂',
-        image: 'https://images.unsplash.com/photo-1528605248644-14dd04022da1?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80',
+        image: servicioCumpleanos,
     },
     {
         title: 'Fiestas Privadas',
         description: 'Celebre con estilo en la comodidad de su hogar o venue favorito.',
         icon: '🎉',
-        image: 'https://images.unsplash.com/photo-1519167758481-83f550bb49b3?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80',
+        image: servicioPrivadas,
     },
     {
         title: 'Lunch',
         description: 'Enviamos lunch con distintas promociones para quienes buscan una opción práctica, sin necesidad de contratar el servicio completo de catering.',
         icon: '🥪',
-        // TODO: reemplazar por una foto propia, como se hizo con el poster del hero.
-        image: 'https://images.unsplash.com/photo-1600335895229-6e75511892c8?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80',
+        image: servicioLunch,
     },
     {
         title: 'Pastelería',

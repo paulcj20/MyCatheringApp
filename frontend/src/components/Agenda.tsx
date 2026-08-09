@@ -189,7 +189,7 @@ const Agenda = () => {
                                         />
                                     </div>
                                     <p id="phone-help" className={`mt-1 text-xs ${phoneError ? 'text-danger-600' : 'text-ink-600'}`}>
-                                        {phoneError || 'Con el 0 adelante, como lo escribís siempre: 091 908 707.'}
+                                        {phoneError || 'Nos comunicaremos a este número por WhatsApp.'}
                                     </p>
                                 </div>
                             </div>
