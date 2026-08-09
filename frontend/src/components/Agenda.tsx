@@ -169,9 +169,6 @@ const Agenda = () => {
                                         <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                                             <FaWhatsapp className="text-ink-400" />
                                         </div>
-                                        <div className="absolute inset-y-0 left-9 flex items-center pointer-events-none text-ink-500 font-medium">
-                                            +598
-                                        </div>
                                         <input
                                             type="tel"
                                             id="phone"
@@ -179,7 +176,7 @@ const Agenda = () => {
                                             required
                                             aria-invalid={phoneError !== ''}
                                             aria-describedby="phone-help"
-                                            className="block w-full pl-24 rounded-lg border-ink-300 shadow-sm focus:border-brand-500 focus:ring-brand-500 p-3 border"
+                                            className="block w-full pl-10 rounded-lg border-ink-300 shadow-sm focus:border-brand-500 focus:ring-brand-500 p-3 border"
                                             placeholder="091 908 707"
                                             value={formData.phone}
                                             onChange={(e) => {
