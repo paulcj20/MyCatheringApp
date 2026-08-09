@@ -1,15 +1,10 @@
 import { motion } from 'framer-motion';
-import { FaWhatsapp } from 'react-icons/fa';
 import heroVideo from '../assets/videos/hero.mp4';
 import heroPoster from '../assets/images/hero-poster.jpg';
-import { siteConfig } from '../site';
-
-const WHATSAPP_MESSAGE = 'Hola! Me gustaria consultar por el catering para un evento.';
-const whatsappHref = `https://wa.me/${siteConfig.whatsappNumber}?text=${encodeURIComponent(WHATSAPP_MESSAGE)}`;
 
 const Hero = () => {
     return (
-        <section id="home" className="relative min-h-screen flex items-center justify-center bg-black py-32">
+        <section id="home" className="relative min-h-svh flex items-center justify-center bg-black py-16 sm:py-20 md:py-24 lg:py-28">
             <div className="absolute inset-0 z-0 overflow-hidden">
                 {/* Darker, more dramatic overlay for better text contrast */}
                 <div className="absolute inset-0 bg-gradient-to-b from-black/70 via-black/20 to-black/70 z-10"></div>
@@ -33,7 +28,7 @@ const Hero = () => {
                     whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true }}
                     transition={{ duration: 1, ease: "easeOut" }}
-                    className="text-5xl md:text-7xl lg:text-8xl font-bold text-white font-serif mb-8 drop-shadow-[0_4px_4px_rgba(0,0,0,0.5)] tracking-tight leading-tight"
+                    className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold text-white font-serif mb-8 drop-shadow-[0_4px_4px_rgba(0,0,0,0.5)] tracking-tight leading-tight"
                 >
                     Arte Culinario para <br />
                     <span className="text-ink-100 italic font-light">Momentos Inolvidables</span>
@@ -54,7 +49,7 @@ const Hero = () => {
                     whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true }}
                     transition={{ duration: 1, delay: 0.6, ease: "easeOut" }}
-                    className="mt-16 flex flex-col items-center gap-6 px-4"
+                    className="mt-8 sm:mt-10 md:mt-12 lg:mt-16 flex flex-col items-center gap-6 px-4"
                 >
                     <div className="flex flex-col sm:flex-row justify-center gap-6 w-full sm:w-auto">
                         {/* Primary Button: Vinoso Solid */}
@@ -74,21 +69,6 @@ const Hero = () => {
                             Nuestros Servicios
                         </a>
                     </div>
-
-                    {/* WhatsApp is the business's primary channel, so it gets a real button —
-                        but on its own row, one size down from the two CTAs above, so
-                        "Reservar Fecha" still reads as the main action and three buttons
-                        never have to crowd onto one line on mobile. Light surface with a
-                        green icon (never green-as-background) keeps contrast solid. */}
-                    <a
-                        href={whatsappHref}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="inline-flex items-center gap-2 px-8 py-3.5 bg-white/95 text-ink-900 text-base font-semibold rounded-xl border-2 border-white/70 transition-all duration-300 hover:bg-white hover:-translate-y-0.5 hover:shadow-[0_0_20px_rgba(255,255,255,0.3)]"
-                    >
-                        <FaWhatsapp size={20} className="text-primary-600" />
-                        Consultanos por WhatsApp
-                    </a>
                 </motion.div>
             </div>
         </section>

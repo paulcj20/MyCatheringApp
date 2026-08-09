@@ -58,9 +58,16 @@ const Agenda = () => {
 
     return (
         <section id="agenda" className="py-20 md:py-28 bg-surface relative overflow-hidden">
-            {/* Decorative bg element: barely-there warmth, not a shape anyone should notice */}
-            <div className="absolute top-0 right-0 -mr-20 -mt-20 w-96 h-96 bg-brand-100 rounded-full mix-blend-multiply filter blur-3xl opacity-30 z-0"></div>
-            <div className="absolute bottom-0 left-0 -ml-20 -mb-20 w-96 h-96 bg-ink-200 rounded-full mix-blend-multiply filter blur-3xl opacity-30 z-0"></div>
+            {/* Decorative bg: soft ambient light anchored off two corners, warm brand
+                tones fading to nothing — reads as light in the room, not shapes on the wall. */}
+            <div
+                className="absolute inset-0 z-0 pointer-events-none"
+                aria-hidden="true"
+                style={{
+                    backgroundImage:
+                        'radial-gradient(ellipse 900px 650px at 100% 0%, rgba(105, 19, 22, 0.07), transparent 60%), radial-gradient(ellipse 900px 650px at 0% 100%, rgba(228, 218, 215, 0.55), transparent 60%)',
+                }}
+            ></div>
 
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
                 <motion.div
