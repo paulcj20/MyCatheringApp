@@ -5,9 +5,9 @@ import { siteConfig } from '../site';
 const Contact = () => {
     return (
         <section id="contact" className="py-20 md:py-28 bg-surface relative overflow-hidden">
-            {/* Decorative bg elements (same as Agenda but inverted colors for white bg compatibility) */}
-            <div className="absolute top-0 left-0 -ml-20 -mt-20 w-96 h-96 bg-primary-100 rounded-full mix-blend-multiply filter blur-3xl opacity-40 z-0"></div>
-            <div className="absolute bottom-0 right-0 -mr-20 -mb-20 w-96 h-96 bg-primary-100 rounded-full mix-blend-multiply filter blur-3xl opacity-40 z-0"></div>
+            {/* Decorative bg elements: warm tones from the palette, kept subtle */}
+            <div className="absolute top-0 left-0 -ml-20 -mt-20 w-96 h-96 bg-brand-100 rounded-full mix-blend-multiply filter blur-3xl opacity-30 z-0"></div>
+            <div className="absolute bottom-0 right-0 -mr-20 -mb-20 w-96 h-96 bg-ink-200 rounded-full mix-blend-multiply filter blur-3xl opacity-30 z-0"></div>
 
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
                 <motion.div

@@ -4,6 +4,7 @@ import Services from './components/Services';
 import Agenda from './components/Agenda';
 import Contact from './components/Contact';
 import Footer from './components/Footer';
+import FloatingWhatsApp from './components/FloatingWhatsApp';
 
 function App() {
   return (
@@ -14,6 +15,7 @@ function App() {
       <Agenda />
       <Contact />
       <Footer />
+      <FloatingWhatsApp />
     </div>
   )
 }
