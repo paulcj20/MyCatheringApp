@@ -215,54 +215,42 @@ eso confirma que Pi-hole no se vio afectado.
 - Consumes: el contenedor del Task 1 en el puerto 8081.
 - Produces: `https://eyegastronomia.com` público.
 
-- [ ] **Step 1: Guardar una copia de la config del túnel**
+> [!] **El túnel está gestionado REMOTAMENTE.** Se descubrió al ejecutar: al reiniciar,
+> cloudflared registra `Updated to new configuration ... version=6` y usa la configuración
+> que baja del panel de Cloudflare, **no** el `~/stacks/cloudflared/config.yaml` que tiene
+> montado. Editar ese archivo no tiene ningún efecto.
+>
+> La versión original de esta tarea editaba el archivo y fue inútil — inofensiva, pero
+> inútil. El archivo quedó anotado con una advertencia para que nadie lo vuelva a intentar.
+>
+> La buena noticia: agregar un *public hostname* desde el panel **crea el registro DNS solo**,
+> así que se resuelven las dos cosas en un paso en vez de dos.
 
-Antes de editar el archivo del que dependen tres servicios en uso:
+- [ ] **Step 1: Agregar los hostnames públicos en el panel de Cloudflare**
 
-```bash
-ssh paul@192.168.1.3 'cp ~/stacks/cloudflared/config.yaml ~/stacks/cloudflared/config.yaml.bak && ls -la ~/stacks/cloudflared/'
-```
+En **Zero Trust → Networks → Tunnels**, abrir el túnel `1117d2c2-2ca5-4f33-8aae-cdcc982e03fc`
+(el mismo que ya publica n8n, Dockge y Beszel) → pestaña **Public Hostname** → **Add a public
+hostname**, dos veces:
 
-- [ ] **Step 2: Agregar la regla de ingress**
+| Subdomain | Domain | Type | URL |
+|---|---|---|---|
+| *(vacío)* | `eyegastronomia.com` | HTTP | `localhost:8081` |
+| `www` | `eyegastronomia.com` | HTTP | `localhost:8081` |
 
-Editar `~/stacks/cloudflared/config.yaml`. Queda así — **la regla `http_status:404` tiene que
-seguir siendo la última**, porque es la que atrapa lo que no coincide y todo lo que esté
-debajo nunca se evalúa:
+El tipo es **HTTP**, no HTTPS: el contenedor sirve HTTP plano en la red local y el TLS lo
+termina Cloudflare en su borde. Poner HTTPS haría que el túnel intente hablar TLS con un
+nginx que no lo tiene y fallaría con error 502.
 
-```yaml
-tunnel: 1117d2c2-2ca5-4f33-8aae-cdcc982e03fc
+No hay que reiniciar nada: el túnel recibe la configuración nueva en segundos.
 
-ingress:
-  - hostname: n8n.devcontainers.site
-    service: http://localhost:5678
-  - hostname: mydockge.devcontainers.site
-    service: http://localhost:5001
-  - hostname: mybeszel.devcontainers.site
-    service: http://localhost:8090
-  - hostname: eyegastronomia.com
-    service: http://localhost:8081
-  - hostname: www.eyegastronomia.com
-    service: http://localhost:8081
-  - service: http_status:404
-```
-
-- [ ] **Step 3: Crear los registros DNS en Cloudflare**
-
-En el panel de Cloudflare, dominio `eyegastronomia.com`, sección DNS. Dos registros CNAME
-**proxied** (nube naranja):
-
-| Tipo | Nombre | Destino |
-|---|---|---|
-| CNAME | `@` | `1117d2c2-2ca5-4f33-8aae-cdcc982e03fc.cfargotunnel.com` |
-| CNAME | `www` | `1117d2c2-2ca5-4f33-8aae-cdcc982e03fc.cfargotunnel.com` |
-
-- [ ] **Step 4: Reiniciar el túnel**
+- [ ] **Step 2: Confirmar que el túnel tomó la configuración**
 
 ```bash
-ssh paul@192.168.1.3 'cd ~/stacks/cloudflared && docker compose restart && sleep 8 && docker logs cloudflared --tail 20'
+ssh paul@192.168.1.3 'docker logs cloudflared --tail 5 2>&1 | grep -o "Updated to new configuration.*version=[0-9]*" | tail -1'
 ```
 
-En los logs tiene que aparecer que registró las conexiones sin errores de configuración.
+Esperado: un `version=` mayor que el anterior, y que el JSON del log incluya
+`eyegastronomia.com`.
 
 - [ ] **Step 5: Verificar que los servicios viejos siguen publicados**
 
@@ -374,20 +362,16 @@ ssh paul@192.168.1.3 'curl -s -o /dev/null -w "%{http_code}\n" http://localhost:
 
 Esperado: `307` (redirige al login por no tener sesión), que es la respuesta correcta.
 
-- [ ] **Step 6: Agregar la regla de ingress y el DNS**
+- [ ] **Step 6: Agregar el hostname público en el panel**
 
-En `~/stacks/cloudflared/config.yaml`, **antes** de la regla `http_status:404`:
+Igual que en el Task 2, y por el mismo motivo — el túnel es de configuración remota, el
+archivo local se ignora. En **Zero Trust → Networks → Tunnels → el túnel → Public Hostname**:
 
-```yaml
-  - hostname: admin.eyegastronomia.com
-    service: http://localhost:3000
-```
+| Subdomain | Domain | Type | URL |
+|---|---|---|---|
+| `admin` | `eyegastronomia.com` | HTTP | `localhost:3000` |
 
-Y en Cloudflare, un CNAME proxied: `admin` → `1117d2c2-2ca5-4f33-8aae-cdcc982e03fc.cfargotunnel.com`.
-
-```bash
-ssh paul@192.168.1.3 'cd ~/stacks/cloudflared && docker compose restart && sleep 8'
-```
+Tipo **HTTP**: el TLS lo termina Cloudflare. El DNS se crea solo.
 
 - [ ] **Step 7: Verificar el panel y que lo anterior sigue vivo**
 
