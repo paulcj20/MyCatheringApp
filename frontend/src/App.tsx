@@ -7,13 +7,11 @@ import Footer from './components/Footer';
 
 function App() {
   return (
-    <div className="min-h-screen bg-white">
+    <div className="min-h-screen bg-surface">
       <Navbar />
       <Hero />
       <Services />
       <Agenda />
-      {/* Visual Separator */}
-      <hr className="border-t border-gray-200" />
       <Contact />
       <Footer />
     </div>

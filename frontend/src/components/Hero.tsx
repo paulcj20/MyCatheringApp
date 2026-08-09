@@ -1,5 +1,6 @@
 import { motion } from 'framer-motion';
 import heroVideo from '../assets/videos/hero.mp4';
+import heroPoster from '../assets/images/hero-poster.jpg';
 
 const Hero = () => {
     return (
@@ -12,8 +13,9 @@ const Hero = () => {
                     loop
                     muted
                     playsInline
+                    preload="metadata"
                     className="w-full h-full object-cover opacity-90"
-                    poster="https://images.unsplash.com/photo-1555244162-803834f70033?ixlib=rb-1.2.1&auto=format&fit=crop&w=1950&q=80"
+                    poster={heroPoster}
                 >
                     <source src={heroVideo} type="video/mp4" />
                     Your browser does not support the video tag.
@@ -24,18 +26,18 @@ const Hero = () => {
                 <motion.h1
                     initial={{ opacity: 0, y: 30 }}
                     whileInView={{ opacity: 1, y: 0 }}
-                    viewport={{ once: false }}
+                    viewport={{ once: true }}
                     transition={{ duration: 1, ease: "easeOut" }}
                     className="text-5xl md:text-7xl lg:text-8xl font-bold text-white font-serif mb-8 drop-shadow-[0_4px_4px_rgba(0,0,0,0.5)] tracking-tight leading-tight"
                 >
                     Arte Culinario para <br />
-                    <span className="text-accent-400 italic font-light">Momentos Inolvidables</span>
+                    <span className="text-ink-100 italic font-light">Momentos Inolvidables</span>
                 </motion.h1>
 
                 <motion.p
                     initial={{ opacity: 0, y: 30 }}
                     whileInView={{ opacity: 1, y: 0 }}
-                    viewport={{ once: false }}
+                    viewport={{ once: true }}
                     transition={{ duration: 1, delay: 0.3, ease: "easeOut" }}
                     className="mt-6 text-xl md:text-2xl text-white max-w-3xl mx-auto font-serif italic font-light drop-shadow-md px-4 tracking-wide leading-relaxed"
                 >
@@ -45,18 +47,16 @@ const Hero = () => {
                 <motion.div
                     initial={{ opacity: 0, y: 30 }}
                     whileInView={{ opacity: 1, y: 0 }}
-                    viewport={{ once: false }}
+                    viewport={{ once: true }}
                     transition={{ duration: 1, delay: 0.6, ease: "easeOut" }}
                     className="mt-16 flex flex-col sm:flex-row justify-center gap-8 px-4 items-center"
                 >
-                    {/* Primary Button: Luxury Gold Gradient with Glow */}
+                    {/* Primary Button: Vinoso Solid */}
                     <a
                         href="#agenda"
-                        className="group relative px-10 py-5 bg-gradient-to-r from-accent-600 via-accent-500 to-accent-400 text-white text-lg font-bold rounded-none uppercase tracking-[0.2em] overflow-hidden transition-all duration-300 hover:shadow-[0_0_40px_rgba(245,158,11,0.6)] transform hover:-translate-y-1 border border-accent-400/30"
+                        className="group relative px-10 py-5 bg-brand-700 text-white text-lg font-bold rounded-none uppercase tracking-[0.2em] overflow-hidden transition-all duration-300 hover:bg-brand-800 hover:shadow-[0_0_40px_rgba(105,19,22,0.6)] transform hover:-translate-y-1"
                     >
                         <span className="relative z-10 drop-shadow-md">Reservar Fecha</span>
-                        <div className="absolute inset-0 h-full w-full bg-gradient-to-r from-accent-500 via-accent-400 to-accent-300 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
-                        {/* Shine effect */}
                         <div className="absolute top-0 -inset-full h-full w-1/2 z-5 block transform -skew-x-12 bg-gradient-to-r from-transparent to-white opacity-20 group-hover:animate-shine" />
                     </a>
 

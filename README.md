@@ -1,43 +1,46 @@
-# MyCathering - Servicio de Catering Premium
+# E&E Gastronomía
 
-## Estructura del Proyecto
+Sitio de catering de E&E Gastronomía: landing pública con formulario de reservas.
 
-Este proyecto es una aplicación Fullstack con:
-- **Frontend**: React (Vite) + TypeScript + TailwindCSS + Framer Motion.
-- **Backend**: Spring Boot 3.2 + Spring Data JPA + H2 Database (Memoria).
+## Estructura
 
-## Requisitos Previos
+- **`frontend/`** — La landing. React 19 + Vite + TypeScript + Tailwind v4 + Framer Motion.
+  Compila a estático y se sirve por Nginx.
+- **`backend/`** — Retirado, no se despliega. Ver `backend/DEPRECATED.md`.
+- **`scripts/`** — Utilidades. `build-brand-assets.py` genera logo, favicons e imagen de
+  Open Graph a partir de `logo.jpg`.
+- **`docs/superpowers/`** — Especificaciones y planes de implementación.
+
+El panel administrativo, el calendario de reservas y la integración con WhatsApp viven en un
+fork de [wacrm](https://github.com/ArnasDon/wacrm), en repositorio aparte.
+
+## Requisitos
+
 - Node.js 18+
-- Java 17+
-- Maven (o IDE con soporte Maven como IntelliJ IDEA)
+- Python 3 con Pillow (solo para regenerar los recursos de marca)
 
-## Instrucciones de Ejecución
+## Desarrollo
 
-### 1. Iniciar el Backend (API & Base de Datos)
-La base de datos H2 es en memoria, por lo que se reinicia cada vez que se detiene la aplicación.
+```bash
+cd frontend
+npm install
+cp .env.example .env    # apuntar VITE_API_BASE_URL al endpoint de reservas
+npm run dev             # http://localhost:5173
+```
 
-1.  Abre la carpeta `backend` en tu IDE favorito (IntelliJ IDEA es recomendado).
-2.  Ejecuta la clase principal: `src/main/java/com/mycathering/api/ApiApplication.java`.
-3.  El servidor iniciará en: `http://localhost:8080`.
-4.  Consola H2 (Base de Datos): `http://localhost:8080/h2-console`
-    - JDBC URL: `jdbc:h2:mem:testdb`
-    - User: `sa`
-    - Password: `password`
+## Comandos
 
-### 2. Iniciar el Frontend (Landing Page)
-1.  Abre una terminal en la carpeta `frontend`.
-2.  Instala las dependencias (si no lo has hecho):
-    ```bash
-    npm install
-    ```
-3.  Inicia el servidor de desarrollo:
-    ```bash
-    npm run dev
-    ```
-4.  Abre tu navegador en `http://localhost:5173`.
+| Comando | Qué hace |
+|---|---|
+| `npm run dev` | Servidor de desarrollo |
+| `npm run build` | Compila TypeScript y genera `dist/` |
+| `npm run preview` | Sirve el build de producción localmente |
+| `npm test` | Tests con Vitest |
+| `npm run lint` | ESLint |
 
-## Funcionalidades
-- **Landing Page Animada**: Diseño profesional con animaciones suaves.
-- **Agenda Web**: Formulario conectado a la API de Spring Boot para guardar reservas.
-- **Contacto**: Formulario de contacto y datos.
-- **Servicios**: Catálogo visual de servicios.
+## Datos del negocio
+
+Nombre, teléfono, email, dirección y horarios viven **solo** en `frontend/src/site.ts`. Lo
+consumen las secciones de Contacto y el Footer, y el JSON-LD de `schema.org/Caterer` se genera
+desde ahí en tiempo de build, mediante el plugin `jsonLdPlugin` de `vite.config.ts`. Para
+cambiar un dato del negocio se edita un solo archivo.
