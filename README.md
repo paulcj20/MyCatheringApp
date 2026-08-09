@@ -71,12 +71,25 @@ demás.
 ```bash
 cd frontend
 npm run build
+ssh paul@192.168.1.3 'rm -rf ~/stacks/eyegastronomia/sitio/*'
 scp -r dist/* paul@192.168.1.3:~/stacks/eyegastronomia/sitio/
 ```
 
 No hace falta reiniciar nada: nginx sirve los archivos del volumen. El HTML se manda con
 `no-cache` y los assets llevan hash en el nombre, así que el cambio se ve en la próxima
 recarga sin purgar caché.
+
+Dos cosas que se aprenden por las malas:
+
+**Vaciar `sitio/` antes de copiar.** `scp` copia pero no borra: sin el `rm` previo, cada
+despliegue deja el bundle anterior huérfano y la carpeta crece indefinidamente. No rompe
+nada —los nombres llevan hash— pero se acumula. `rsync --delete` sería lo natural, pero el
+servidor no tiene rsync instalado.
+
+**Vaciar el contenido, nunca mover la carpeta.** Si en vez de `rm -rf sitio/*` se hace
+`mv sitio sitio.viejo && mv sitio.nuevo sitio`, el bind mount de Docker queda apuntando al
+inodo anterior y nginx empieza a devolver **403** aunque los archivos estén perfectos. Si
+pasa, se arregla con `docker compose restart sitio`.
 
 ### Subir un cambio del panel
 
