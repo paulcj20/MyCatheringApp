@@ -40,7 +40,7 @@ El spec asumía Nginx en 80/443 con el túnel por instalar. Ninguna de las dos c
   interno.
 - **No hay Certbot.** El TLS lo termina Cloudflare.
 
-Resultado: el despliegue es agregar un stack y dos reglas de ingress.
+Resultado: el despliegue es agregar un stack y tres *public hostnames* en el panel.
 
 ## Global Constraints
 
@@ -49,9 +49,12 @@ Resultado: el despliegue es agregar un stack y dos reglas de ingress.
 - **No ocupar los puertos 80, 443 ni 53.**
 - El stack nuevo va en `~/stacks/eyegastronomia/`, siguiendo la convención de la máquina, para
   que aparezca en Dockge junto a los demás.
-- **Editar `~/stacks/cloudflared/config.yaml` conservando las tres reglas existentes** de
-  `devcontainers.site`. La regla `http_status:404` va siempre última: es la que atrapa lo que
-  no coincide, y cualquier regla puesta debajo nunca se evalúa.
+- **No editar `~/stacks/cloudflared/config.yaml`: el túnel es de configuración remota y ese
+  archivo se ignora.** Las rutas se agregan como *public hostnames* en Zero Trust, que además
+  crea el DNS. El archivo del servidor quedó anotado con esta advertencia.
+- **Verificar después de cada cambio en el túnel que los tres hostnames de
+  `devcontainers.site` siguen respondiendo.** Es el riesgo real de este despliegue: no que algo
+  nuevo falle, sino romper algo que ya funciona.
 - Los secretos van en un `.env` junto al `compose.yaml`, nunca en el repositorio.
 - Dominio: `eyegastronomia.com` (landing) y `admin.eyegastronomia.com` (panel).
 - El panel se sirve con `noindex`.
